@@ -13,7 +13,7 @@
 
         <h3>Audits</h3>
 
-        <p>
+        <div>
             <p>Curve smart contracts were <router-link to="/audits">Audited</router-link> by
             Trail of Bits.</p>
 
@@ -24,13 +24,12 @@
 
             <p>Using Curve as an exchange user should be significantly less
             risky, but this is not advice.</p>
-
-        </p>
+        </div>
 
 
         <h3>Admin keys</h3>
 
-        <p>
+        <div>
             Admin key allows to pause the contract in an emergency, but only during first 2 months in existence. Also it allows to change amplification coefficient (curve parameter), admin fee (not more than half of fee which LPs take) and the fee. All the changes are timelocked for 3 days before being applied for enough notice.
 
             <p>Smart contracts <b>CANNOT</b> be upgraded with admin key. This limits actions in a case of emergency, but leaves users fully in control of their funds.</p>
@@ -38,7 +37,7 @@
             <p>
                 Curve will be transitioning to a DAO to be fully decentralized.
             </p>
-        </p>
+        </div>
 
         <h3>Permanent loss of a peg</h3>
 

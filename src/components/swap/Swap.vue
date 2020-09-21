@@ -52,7 +52,6 @@
                                     <span v-show="!swapwrapped && !['tbtc', 'ren', 'sbtc'].includes(currentPool)">{{currency | capitalize}}</span>
                                     <span v-show="swapwrapped || ['tbtc', 'ren', 'sbtc'].includes(currentPool)">{{currencies[currency]}}</span>
                                 </label>
-                            </label>
                             </li>
                         </ul>
                     </fieldset>
@@ -78,7 +77,7 @@
                                     ≈ {{ actualToValue }}$
                                 </p>
                             </li>
-                            <li class='coins' v-for='(currency, i) in Object.keys(currencies)'>
+                            <li class='coins' v-for='(currency, i) in Object.keys(currencies)' :key="i">
                                 <input type="radio" :id="'to_cur_'+i" name="to_cur" :value='i' v-model='to_currency'>
                                 <label :for="'to_cur_'+i">
                                     <img 
@@ -87,7 +86,6 @@
                                     <span v-show="!swapwrapped && !['tbtc', 'ren'].includes(currentPool)">{{currency | capitalize}}</span>
                                     <span v-show="swapwrapped || ['tbtc', 'ren'].includes(currentPool)">{{currencies[currency]}}</span>
                                 </label>
-                            </label>
                             </li>
                         </ul>
                     </fieldset>

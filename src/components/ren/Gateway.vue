@@ -49,7 +49,6 @@
                                     :src='getTokenIcon(currency)'>
                                 <span>{{currency | capitalize}}</span>
                             </label>
-                        </label>
                         </li>
                         <div v-show='from_currency == 0 && amountAfterBTC >= 0' class='amount-after-fees'> 
                         	Amount after renVM fees: {{amountAfterBTC}}
@@ -67,7 +66,6 @@
                             <input type="text" 
                             id="to_currency" 
                             name="to_currency" 
-                            value="0.00" 
                             disabled
                             :style = "{backgroundColor: bgColor}"
                             :value = 'toInputFormat'>
@@ -78,7 +76,7 @@
                                 ≈ {{ actualToValue }}$
                             </p>
                         </li>
-                        <li class='coins' v-for='(currency, i) in Object.keys(currencies)'>
+                        <li class='coins' v-for='(currency, i) in Object.keys(currencies)' :key="i">
                             <input type="radio" :id="'to_cur_'+i" name="to_cur" :value='i' v-model='to_currency'>
                             <label :for="'to_cur_'+i">
                             	<img 
@@ -86,7 +84,6 @@
                                     :src='getTokenIcon(currency)'>
                                 <span>{{currency | capitalize}}</span>
                             </label>
-                        </label>
                         </li>
                         <div v-show='[1,2].includes(from_currency) && to_currency == 0 && toInputOriginal >= 0' class='amount-after-fees'>
                         	Amount before renVM fees: {{toInputOriginal.toFixed(8)}}
@@ -681,7 +678,9 @@
         font-size: 0.9em;
 	}
 	#from_currency {
-        border-color: #2f3437!important;
+		border-color: #2f3437!important;
+		border-top: #2f3437;
+		border-left: #2f3437;
     }
 	#to-currency {
 		border-color: #2f3437;

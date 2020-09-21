@@ -31,7 +31,7 @@
 		                		<img class='icon' :src="publicPath + 'curveIcons/nexusmutual.png'"> <span class='text'>BTC pools - curvebtc.nexusmutual.eth</span>
 		                	</a>
 		            </fieldset>
-		            <fieldset v-for = '(addresses, i) in contractAddresses'>
+		            <fieldset v-for = '(addresses, i) in contractAddresses' :key="i">
 		            	<legend>{{allPools[i]}}</legend>
 		                	<a :href = "'https://etherscan.io/address/' + addresses.swap">
 		                		<img class='icon' :src="getTokenUrl(i)"> <span class='text'>swap address</span>
@@ -86,7 +86,7 @@
 		                		<img class='icon' :src="publicPath + 'curveIcons/aragon.png'"> <span class='text'>Emergency DAO</span>
 		                	</a>
 		            </fieldset>
-		            <fieldset v-for = '(addresses, i) in gaugeAddresses'>
+		            <fieldset v-for = '(addresses, i) in gaugeAddresses' :key="i">
 		            	<legend>{{allPools[i]}} gauge</legend>
 		                	<a :href = "'https://etherscan.io/address/' + addresses.address">
 		                		<img class='icon' :src="getTokenUrl(i)"> <span class='text'>{{allPools[i]}} Gauge address</span>

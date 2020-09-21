@@ -706,8 +706,6 @@ button.bn-onboard-custom, #derivation-select button, #account-select + button {
     border: 1px solid #414141;
     border-radius: 50%;
 }
-.dai-icon {
-}
 .susd-icon {
     width: 1.5em;
     height: 1.5em;

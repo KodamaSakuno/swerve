@@ -277,10 +277,6 @@
 </script>
 
 <style scoped>
-	.descriptionscontainer {
-		
-	}
-
 	.descriptions {
 		height: 0;
 		overflow: hidden;

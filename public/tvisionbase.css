@@ -78,11 +78,6 @@ fieldset {
   flex-direction: column;
 }
 
-
-.window.blue p {
-  /*color: white; text-shadow: 0 0 2px white;*/
-}
-
 button {
   margin:0;padding:0;border:none;
   cursor: pointer;

@@ -4,7 +4,7 @@
             <fieldset class="currencies">
                 <legend>Currencies:</legend>
                 <ul>
-                    <li v-for='(currency, i) in Object.keys(currencies)'>
+                    <li v-for='(currency, i) in Object.keys(currencies)' :key="i">
                         <label :for="'currency_'+i">
                         	<span class='currency_label'>
                                 <img 
@@ -87,7 +87,7 @@
             <div class='simple-error pulse' v-show="susdWaitingPeriod">
                 Cannot transfer {{ currentPool == 'susdv2' ? 'sUSD' : 'sBTC' }} during waiting period. {{ (susdWaitingPeriodTime).toFixed(0) }} secs left.
             </div>
-            <p style="text-align: center" class='buttons'>
+            <div style="text-align: center" class='buttons'>
                 <button id="add-liquidity" 
                     :disabled="currentPool == 'susdv2' && slippage < -0.03 || depositingZeroWarning || isZeroSlippage"
                     @click='justDeposit = true; handle_add_liquidity()' 
@@ -206,7 +206,7 @@
                     </p>
                 </div>
                 <Slippage/>
-            </p>
+            </div>
         </div>
 	</div>
 </template>
