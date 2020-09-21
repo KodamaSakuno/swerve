@@ -1,10 +1,10 @@
 <h1 align="center">Swerve Tron UI</h1>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/curvefi/curve-ui/feature/add-info/assets/curve-image.jpeg" />
+  <img src="https://raw.githubusercontent.com/nekomeowww/swerve/master/public/img/icons/favicon-32x32.png" />
 </p>
 
-## curve-vue
+## swerve
 
 ### Project setup
 ```
