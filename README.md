@@ -4,7 +4,7 @@
   <img src="https://raw.githubusercontent.com/nekomeowww/swerve/master/public/img/icons/favicon-32x32.png" />
 </p>
 
-## curve-vue
+## swerve
 
 ### Project setup
 ```
