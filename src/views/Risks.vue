@@ -2,7 +2,7 @@
 	<div :class="{'window white': $route.path == '/risks'}">
         <h2>
             Risks of using 
-            <img :src="publicPath + 'logo.png'" class='icon'> Curve Finance
+            <img :src="publicPath + 'logo.svg'" class='icon'> Curve Finance
         </h2>
 
         <p>

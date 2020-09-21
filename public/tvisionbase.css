@@ -48,6 +48,7 @@ fieldset {
 }
 
 .window.white {
+  color: white;
   background: silver;
   background: #202426;
   border: 6px double #000;
@@ -68,7 +69,13 @@ fieldset {
 }
 
 .window h1 {
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+  color: white;
   text-align: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 
@@ -92,7 +99,6 @@ select.tvision {
   font-size: inherit;
   background: #86fce7;
   padding: 0 1em;
-  box-shadow: .5em .5em 3px rgba(0,0,0,.5);
   position: relative;
   transition: .2s all ease-in;
 }

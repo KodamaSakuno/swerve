@@ -62,7 +62,7 @@
 		            <fieldset>
 		            	<legend>Curve DAO</legend>
 		                	<a href = "https://etherscan.io/address/0xD533a949740bb3306d119CC777fa900bA034cd52">
-		                		<img class='icon' :src="publicPath + 'logo.png'"> <span class='text'>CRV token</span>
+		                		<img class='icon' :src="publicPath + 'logo.svg'"> <span class='text'>CRV token</span>
 		                	</a>
 		                	<a href = "https://etherscan.io/address/0x5f3b5DfEb7B28CDbD7FAba78963EE202a494e2A2">
 		                		<span class='text'>Voting Escrow</span>
@@ -187,7 +187,7 @@
 			},
 		},
 		metaInfo: {
-	      title: 'Curve.fi :: Contracts',
+	      title: 'Swerve Tron :: Contracts',
 	      meta: [
 	        {'property': 'og:title', 'content': 'beta.curve.fi/contracts'},
 	        {'property': 'og:url', 'content': 'https://curve.fi/contracts'},

@@ -27,6 +27,7 @@
 }
 
 .poolsdialog div a {
+    color: white;
     display: block;
 }
 
@@ -58,6 +59,7 @@ p[id^='chart'] {
 }
 
 p.exchange-rate, p.best-pool-text {
+    color: white;
     text-align: right;
     padding-right: 0.5em;
 }
@@ -171,20 +173,29 @@ div.info table td {
 }
 
 .poolsdialog legend {
+  color: white;
   text-align: center;
 }
 
 .poolsdialog a {
+  color: white !important;
   display: inline-block;
 }
 .poolsdialog > div {
+  color: black;
+  cursor: pointer;
+}
+.poolsdialog > div > a:hover {
+  color: black !important;
   cursor: pointer;
 }
 .poolsdialog > div > span{
+  color: black;
   padding-right: 2em;
 }
 /* fixing selector priority */
 .window .poolsdialog a:hover {
+  color: black;
   text-decoration: none;
 }
 
@@ -397,6 +408,7 @@ label[for='gasinstant'] {
 }
 
 .exchange label[for='inf-approval'], .exchange label[for='swapw'] {
+  color: white;
   margin-left: -2px;
 }
 

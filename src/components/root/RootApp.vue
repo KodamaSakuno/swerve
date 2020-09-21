@@ -83,7 +83,7 @@
     </div>
     <div id="screen">
         <div :class="'blue window ' + $route.name">
-            <h1><img :src="logoSrc" alt="🌀 Curve"></h1>
+            <h1><img :src="logoSrc" alt="🌀 Swerve Tron">Swerve Tron</h1>
         </div>
         <div class='info-message gentle-message window half-width gentle-message' v-if='hasConnectedWallet'>
           You haven't connected a wallet. <button @click='changeWallets'>Connect wallet</button>
@@ -119,7 +119,7 @@
 
   export default {
     metaInfo: {
-      title: 'Curve.fi',
+      title: 'Swerve Tron',
       meta: [
         {'property': 'og:title', 'content': 'curve.fi'},
         {'property': 'og:url', 'content': 'https://curve.fi'},
@@ -147,8 +147,8 @@
         return process.env.BASE_URL
       },
       logoSrc() {
-        if(!currentContract.swapbtc) return this.publicPath + 'logo_optimized.svg'
-        else return this.publicPath + 'logo_ren_beta_optimized.svg'
+        if(!currentContract.swapbtc) return this.publicPath + 'logo.svg'
+        else return this.publicPath + 'logo.svg'
       },
       hasConnectedWallet() {
         return this.default_account == '0x0000000000000000000000000000000000000000' 

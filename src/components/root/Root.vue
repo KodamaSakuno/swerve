@@ -32,7 +32,7 @@
                     	<span :class="{'loading line': !daily_apy[0]}">{{daily_apy[0]}}</span>%
                     	<br>
                     	<div :class="{'incentive-apr': true}">(+{{CRVAPYs.compound | toFixed2}}%
-                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.png'"> CRV
+                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
                                 <span class='tooltiptext'>
                                     CRV LP reward annualized
                                 </span>
@@ -115,7 +115,7 @@
 	                    	</span> 
 	                    	<span :class="{'loading line': !daily_apy[5]}">{{daily_apy[5]}}</span>%
 	                    	<div :class="{'incentive-apr': true}">(+{{CRVAPYs.pax | toFixed2}}%
-	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.png'"> CRV
+	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
 	                                <span class='tooltiptext'>
 	                                    CRV LP reward annualized
 	                                </span>
@@ -159,7 +159,7 @@
 	                            </span>)
                     		</div>
                     		<div :class="{'incentive-apr': true}">(+{{CRVAPYs.y | toFixed2}}%
-	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.png'"> CRV
+	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
 	                                <span class='tooltiptext'>
 	                                    CRV LP reward annualized
 	                                </span>
@@ -196,7 +196,7 @@
 	                    	</span> 
 	                    	<span :class="{'loading line': !daily_apy[3]}">{{daily_apy[3]}}</span>%
 	                    	<div :class="{'incentive-apr': true}">(+{{CRVAPYs.busd | toFixed2}}%
-	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.png'"> CRV
+	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
 	                                <span class='tooltiptext'>
 	                                    CRV LP reward annualized
 	                                </span>
@@ -253,7 +253,7 @@
 		                            </span>)
 	                    		</div>
 	                    		<div :class="{'incentive-apr': true}">(+{{CRVAPYs.susdv2 | toFixed2}}%
-		                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.png'"> CRV
+		                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
 		                                <span class='tooltiptext'>
 		                                    CRV LP reward annualized
 		                                </span>
@@ -320,7 +320,7 @@
 	                    	</span> 
 	                    	<span :class="{'loading line': !daily_apy[7]}">{{daily_apy[7]}}</span>%
 	                    	<div :class="{'incentive-apr': true}">(+{{CRVAPYs.ren | toFixed2}}%
-	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.png'"> CRV
+	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
 	                                <span class='tooltiptext'>
 	                                    CRV LP reward annualized
 	                                </span>
@@ -371,7 +371,7 @@
 		                            </span>)
 	                    		</div>
 	                    		<div :class="{'incentive-apr': true}">(+{{CRVAPYs.sbtc | toFixed2}}%
-		                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.png'"> CRV
+		                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
 		                                <span class='tooltiptext'>
 		                                    CRV LP reward annualized
 		                                </span>

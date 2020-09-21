@@ -53,7 +53,7 @@
 
 	export default {
 		metaInfo: {
-	      title: 'Curve.fi - Stats',
+	      title: 'Swerve Tron - Stats',
 	      meta: [
 	      	{'property': 'og:url', 'content': 'https://curve.fi/combinedstats'},
 	      	{'name': 'twitter:url', 'content': 'https://curve.fi/combinedstats'},

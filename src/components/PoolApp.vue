@@ -72,7 +72,7 @@
     </div>
     <div id="screen">
         <div :class="{'blue window': true, [$route.name]: true}">
-            <h1><img :src="logoSrc" alt="🌀 Curve"></h1>
+            <h1><img :src="logoSrc" alt="🌀 Curve">Swerve Tron</h1>
         </div>
         <div class="error window half-width info" id="error-window" v-show='error'>
           {{error}}
@@ -136,7 +136,7 @@
   export default {
     metaInfo() {
       return {
-        title: 'Curve.fi :: ' + titles[this.currentPool],
+        title: 'Swerve Tron :: ' + titles[this.currentPool],
       }
     },
     data: () => ({
@@ -165,8 +165,8 @@
         return process.env.BASE_URL
       },
       logoSrc() {
-        if(!currentContract.swapbtc) return this.publicPath + 'logo_optimized.svg'
-        else return this.publicPath + 'logo_ren_beta_optimized.svg'
+        if(!currentContract.swapbtc) return this.publicPath + 'logo.svg'
+        else return this.publicPath + 'logo.svg'
       },
       hasConnectedWallet() {
         return this.default_account == '0x0000000000000000000000000000000000000000'

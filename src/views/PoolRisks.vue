@@ -2,7 +2,7 @@
 	<div class="window white">
         <h2>
             Risks of using 
-            <img :src="publicPath + 'logo.png'" class='icon'> {{ currentPool }} pool
+            <img :src="publicPath + 'logo.svg'" class='icon'> {{ currentPool }} pool
         </h2>
         
         <ul class='poolrisks' v-show="['compound', 'pax', 'iearn', 'y', 'busd'].includes(currentPool)">

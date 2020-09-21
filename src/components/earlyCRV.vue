@@ -1,7 +1,7 @@
 <template>
 	<div class='window white'>
 		<fieldset>
-			<legend>Historical LP <img class='icon small' :src="publicPath + 'logo.png'"> CRV Distribution</legend>
+			<legend>Historical LP <img class='icon small' :src="publicPath + 'logo.svg'"> CRV Distribution</legend>
 			<div class='info-message gentle-message'>
 				<a href='https://dao.curve.fi/minter/vesting'>
 					Vesting UI - claim CRV
@@ -14,7 +14,7 @@
 			<button @click='submit'>Check</button>
 
 			<div class='earlyCRV' v-show='crv !== null'>
-				Early &nbsp; <img class='icon small' :src="publicPath + 'logo.png'"> &nbsp; CRV amount: {{ crv }}
+				Early &nbsp; <img class='icon small' :src="publicPath + 'logo.svg'"> &nbsp; CRV amount: {{ crv }}
 			</div>
 			<div class='datainfo'>
 				<a href='https://github.com/curvefi/early-user-distribution'>Calculation script</a>
