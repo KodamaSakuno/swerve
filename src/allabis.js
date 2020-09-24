@@ -1,5 +1,5 @@
 export var infura_url = 'https://mainnet.infura.io/v3/c334bb4b45a444979057f0fb8a0c9d1b'
-export let multicall_address = '0xeefBa1e63905eF1D7ACbA5a8513c70307C1cE441'
+export let multicall_address = 'TC4qgwhXfmDg2zmtqJbhPsW4QLWVLGes5o'
 export let multicall_abi = [{"constant":true,"inputs":[],"name":"getCurrentBlockTimestamp","outputs":[{"name":"timestamp","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"components":[{"name":"target","type":"address"},{"name":"callData","type":"bytes"}],"name":"calls","type":"tuple[]"}],"name":"aggregate","outputs":[{"name":"blockNumber","type":"uint256"},{"name":"returnData","type":"bytes[]"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getLastBlockHash","outputs":[{"name":"blockHash","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"addr","type":"address"}],"name":"getEthBalance","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getCurrentBlockDifficulty","outputs":[{"name":"difficulty","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getCurrentBlockGasLimit","outputs":[{"name":"gaslimit","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getCurrentBlockCoinbase","outputs":[{"name":"coinbase","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"blockNumber","type":"uint256"}],"name":"getBlockHash","outputs":[{"name":"blockHash","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"}]
 export const ERC20_abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]
 
@@ -2899,25 +2899,25 @@ var usdt = {
 
 var iearn = {
   N_COINS: 4,
-  coin_precisions: [1e18, 1e6, 1e6, 1e18],
-  wrapped_precisions: [1e18, 1e6, 1e6, 1e18],
+  coin_precisions: [1e6, 1e6, 1e6, 1e6],
+  wrapped_precisions: [1e6, 1e6, 1e6, 1e6],
   use_lending: [true, true, true, true],
-  tethered: [false, false, true, false],
+  tethered: [true, true, false, false],
   is_plain: [false, false, false, false],
-  swap_address: '0x45F783CCE6B7FF23B2ab2D70e416cdb7D6055f51',
-  token_address: '0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8',
+  swap_address: 'THWqKsLCrr4RQAJP3vvdHDxX3BNWJFan3H',
+  token_address: 'TG9XCSjAqJdgJwtHQg97an9yqip5HdBoAe',
   infura_url: 'https://mainnet.infura.io/v3/c334bb4b45a444979057f0fb8a0c9d1b',
   underlying_coins: [
-        '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-        '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-        '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-        '0x0000000000085d4780B73119b644AE5ecd22b376'],
+        'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+        'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+        'TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT',
+        'TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT'],
   coins: [
-        '0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01',
-        '0xd6aD7a6750A7593E092a9B218d66C0A814a3436e',
-        '0x83f798e925BcD4017Eb265844FDDAbb448f1707D',
-        '0x73a052500105205d34Daf004eAb301916DA8190f'],
-  deposit_address: '0xbBC81d23Ea2c3ec7e56D39296F0cbB648873a5d3',
+        'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+        'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+        'TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT',
+        'TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT'],
+  deposit_address: 'TPxB1C6mqARfCPRGic4572S8m114n6jXei',
   deposit_abi: [
 	 {
 	  "outputs": [],
@@ -3960,6 +3960,22 @@ var iearn = {
   sCurveRewards_address: '0x0001FB050Fe7312791bF6475b96569D83F695C9f',
   aRewards_abi: [{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":true,"inputs":[],"name":"adai","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"claim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_claimer","type":"address"}],"name":"claimable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"governance","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"seize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"yfi","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}],
   aRewards_address: '0xcc9efea3ac5df6ad6a656235ef955fbfef65b862',
+  APYOracle_address: "TPLv3XvAgzxoQw8b5ZsPppUo3VA281PGTt",
+  APYOracle_abi: [
+    {
+      "inputs": [],
+      "name": "getAPY",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
 }
 
 var busd = {
@@ -5879,7 +5895,7 @@ var susd = {
 
   swap_address: '0xeDf54bC005bc2Df0Cc6A675596e843D28b16A966',
   token_address: '0x2b645a6A426f22fB7954dC15E583e3737B8d1434',
-  N_COINS: 2, 
+  N_COINS: 2,
   tethered: [false, false],
   use_lending: [true, true],
   is_plain: [false, false],
@@ -8911,7 +8927,7 @@ var sbtc = {
 	coins: [
 		'0xEB4C2781e4ebA804CE9a9803C67d0893436bB27D',
 		'0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
-		'0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6',	
+		'0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6',
 	],
 	adapterABI: [{"inputs":[{"internalType":"contract ICurveExchange","name":"_exchange","type":"address"},{"internalType":"address","name":"_curveTokenAddress","type":"address"},{"internalType":"contract IGatewayRegistry","name":"_registry","type":"address"},{"internalType":"contract IERC20[3]","name":"_coins","type":"address[3]"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"burnAmount","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"mintedAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"curveAmount","type":"uint256"},{"indexed":false,"internalType":"uint256[3]","name":"amounts","type":"uint256[3]"}],"name":"DepositMintedCurve","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"userAddress","type":"address"},{"indexed":false,"internalType":"address payable","name":"relayerAddress","type":"address"},{"indexed":false,"internalType":"bytes","name":"functionSignature","type":"bytes"}],"name":"MetaTransactionExecuted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"renAmount","type":"uint256"}],"name":"ReceiveRen","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"mintedAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"erc20BTCAmount","type":"uint256"},{"indexed":false,"internalType":"int128","name":"j","type":"int128"}],"name":"SwapReceived","type":"event"},{"stateMutability":"payable","type":"fallback"},{"inputs":[],"name":"chi","outputs":[{"internalType":"contract IFreeFromUpTo","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"exchange","outputs":[{"internalType":"contract ICurveExchange","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"userAddress","type":"address"},{"internalType":"bytes","name":"functionSignature","type":"bytes"},{"internalType":"string","name":"message","type":"string"},{"internalType":"string","name":"length","type":"string"},{"internalType":"bytes32","name":"sigR","type":"bytes32"},{"internalType":"bytes32","name":"sigS","type":"bytes32"},{"internalType":"uint8","name":"sigV","type":"uint8"}],"name":"executeMetaTransaction","outputs":[{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"getChainID","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getNonce","outputs":[{"internalType":"uint256","name":"nonce","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address payable","name":"_wbtcDestination","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"uint256[3]","name":"_amounts","type":"uint256[3]"},{"internalType":"uint256","name":"_min_mint_amount","type":"uint256"},{"internalType":"uint256","name":"_new_min_mint_amount","type":"uint256"},{"internalType":"bytes32","name":"_nHash","type":"bytes32"},{"internalType":"bytes","name":"_sig","type":"bytes"}],"name":"mintThenDeposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_minExchangeRate","type":"uint256"},{"internalType":"uint256","name":"_newMinExchangeRate","type":"uint256"},{"internalType":"uint256","name":"_slippage","type":"uint256"},{"internalType":"int128","name":"_j","type":"int128"},{"internalType":"address payable","name":"_coinDestination","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"bytes32","name":"_nHash","type":"bytes32"},{"internalType":"bytes","name":"_sig","type":"bytes"}],"name":"mintThenSwap","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"encoded","type":"bytes"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"bytes32","name":"_nHash","type":"bytes32"},{"internalType":"bytes","name":"_sig","type":"bytes"}],"name":"recoverStuck","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"registry","outputs":[{"internalType":"contract IGatewayRegistry","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes","name":"_btcDestination","type":"bytes"},{"internalType":"address","name":"_coinDestination","type":"address"},{"internalType":"uint256[3]","name":"amounts","type":"uint256[3]"},{"internalType":"uint256","name":"max_burn_amount","type":"uint256"}],"name":"removeLiquidityImbalanceThenBurn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"_btcDestination","type":"bytes"},{"internalType":"uint256","name":"_token_amounts","type":"uint256"},{"internalType":"uint256","name":"min_amount","type":"uint256"},{"internalType":"uint8","name":"_i","type":"uint8"}],"name":"removeLiquidityOneCoinThenBurn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"_btcDestination","type":"bytes"},{"internalType":"address","name":"_coinDestination","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256[3]","name":"min_amounts","type":"uint256[3]"}],"name":"removeLiquidityThenBurn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"_btcDestination","type":"bytes"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"uint256","name":"_minRenbtcAmount","type":"uint256"},{"internalType":"uint8","name":"_i","type":"uint8"}],"name":"swapThenBurn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"string","name":"message","type":"string"},{"internalType":"string","name":"length","type":"string"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"uint256","name":"chainID","type":"uint256"},{"internalType":"bytes32","name":"sigR","type":"bytes32"},{"internalType":"bytes32","name":"sigS","type":"bytes32"},{"internalType":"uint8","name":"sigV","type":"uint8"}],"name":"verify","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"pure","type":"function"},{"stateMutability":"payable","type":"receive"}],
 	oldAdapterAddress: '0x104c1E66c67c385E6095FFcC6227D75c761DC019',

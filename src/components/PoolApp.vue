@@ -22,8 +22,8 @@
             <a href="https://explore.duneanalytics.com/public/dashboards/RTH47mNjQcoLv5oG0HMDdI0iDq7BHxk1PzCRdwQB">Dune Analytics</a>
             <p>____________</p>
             <button class='simplebutton' @click = 'changeWallets'>Change wallet</button>
-            <button id='changeAccounts' class='simplebutton' 
-              v-show="['ledger', 'trezor'].includes(walletName)" 
+            <button id='changeAccounts' class='simplebutton'
+              v-show="['ledger', 'trezor'].includes(walletName)"
               @click = 'changeAccounts'>Change accounts</button>
         </div>
       </div>
@@ -34,7 +34,6 @@
       <router-link :to="'/'+currentPool" v-show="currentPool !='susd'">Buy and sell</router-link>
       <router-link :to="'/' + currentPool + '/deposit'" v-show="currentPool !='susd'">Deposit</router-link>
       <router-link :to="'/' + currentPool + '/withdraw'">Withdraw</router-link>
-      <router-link :to="'/curvepay/' + currentPool">Pay</router-link>
       <div class='poolsdropdown right'>
         <span>?</span>
         <div class='dropdown'>
@@ -66,8 +65,8 @@
       <a :href="'https://github.com/curvefi/curve-contract/tree/pool_'+gitBranches[currentPool]" class='showmobile' rel='noopener noreferrer'>git@</a>
       <a href="https://github.com/curvefi/curve-vue" class='showmobile' rel='noopener noreferrer'>git@UI</a>
       <button class='simplebutton showmobile' @click = 'changeWallets'>Change wallet</button>
-      <button id='changeAccounts' class='simplebutton showmobile' 
-        v-show="['ledger', 'trezor'].includes(walletName)" 
+      <button id='changeAccounts' class='simplebutton showmobile'
+        v-show="['ledger', 'trezor'].includes(walletName)"
         @click = 'changeAccounts'>Change accounts</button>
     </div>
     <div id="screen">
@@ -87,7 +86,7 @@
         </div>
         <div class='simple-error window' v-show='plsReturn'>
           Your recent withdrawal from Curve resulted in getting 1000 more USDT because of another user mistakenly transferring funds to the contract.
-          If you wish to return them - please contact us on <a href='https://twitter.com/CurveFinance'>Twitter</a>/<a href='https://t.me/curvefi'>Telegram</a>/<a href="https://discord.gg/9uEHakc" rel='noopener noreferrer'>@Discord</a>. Thank you! 
+          If you wish to return them - please contact us on <a href='https://twitter.com/CurveFinance'>Twitter</a>/<a href='https://t.me/curvefi'>Telegram</a>/<a href="https://discord.gg/9uEHakc" rel='noopener noreferrer'>@Discord</a>. Thank you!
         </div>
         <router-view/>
     </div>

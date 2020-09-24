@@ -30,10 +30,8 @@ const currencies = {
 		usdt: 'USDT'
 	},
 	iearn: {
-		dai: 'yDAI',
-		usdc: 'yUSDC',
 		usdt: 'yUSDT',
-		tusd: 'yTUSD'
+		usdj: 'yUSDJ'
 	},
 	busd: {
 		dai: 'yDAI',
@@ -423,7 +421,7 @@ export const getters = {
 	initial_A_time: () => state.initial_A_time,
 	future_A: () => state.future_A,
 	future_A_time: () => state.future_A_time,
-	admin_actions_deadline: () => state.admin_actions_deadline, 
+	admin_actions_deadline: () => state.admin_actions_deadline,
 	initializedContracts: () => state.initializedContracts,
 	showSlippage: () => state.showSlippage,
 	slippage: () => state.slippage,
@@ -440,7 +438,7 @@ export const getters = {
 
 
 export async function init(contract, refresh = false) {
-	state.multicall = state.multicall || new web3.eth.Contract(multicall_abi, multicall_address)
+	state.multicall = state.multicall || window.tronWeb.contract(multicall_abi, multicall_address)
 	console.time('init')
 	//contract = contracts.compound for example
 	if(state.initializedContracts && contract.currentContract == state.currentContract && !refresh) return Promise.resolve();
@@ -458,7 +456,7 @@ export async function init(contract, refresh = false) {
     }
 
 	if(['ren', 'sbtc'].includes(contract.currentContract))
-		state.chi = state.chi || new web3.eth.Contract(ERC20_abi, CHI_address)
+		state.chi = state.chi || window.tronWeb.contract(ERC20_abi, CHI_address)
 
     let calls  = [
     	//get_virtual_price
@@ -470,7 +468,7 @@ export async function init(contract, refresh = false) {
         //admin_actions_deadline
         [allabis[contract.currentContract].swap_address, '0x405e28f8'],
     ];
-    
+
     if(contract.currentContract == 'compound') {
 	    state.old_swap = new state.web3.eth.Contract(allabis.compound.old_swap_abi, old_swap_address);
 	    state.old_swap_token = new state.web3.eth.Contract(ERC20_abi, old_token_address);
@@ -486,7 +484,7 @@ export async function init(contract, refresh = false) {
 
 		contract.curveRewards = new state.web3.eth.Contract(allabis.susdv2.sCurveRewards_abi, allabis.susdv2.sCurveRewards_address)
 		calls.push([contract.curveRewards._address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
-    	
+
     	contract.snxExchanger = new state.web3.eth.Contract(synthetixExchanger_ABI, synthetixExchanger_address)
     }
     if(contract.currentContract == 'sbtc') {
@@ -497,9 +495,9 @@ export async function init(contract, refresh = false) {
     	contract.snxExchanger = new state.web3.eth.Contract(synthetixExchanger_ABI, synthetixExchanger_address)
     }
     if(['iearn','y'].includes(contract.currentContract)) {
-    	contract.aRewards = new state.web3.eth.Contract(allabis.iearn.aRewards_abi, allabis.iearn.aRewards_address)
-    	contract.curveRewards = new state.web3.eth.Contract(allabis.iearn.sCurveRewards_abi, allabis.iearn.sCurveRewards_address)
-		calls.push([contract.curveRewards._address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+    	// contract.aRewards = new state.web3.eth.Contract(allabis.iearn.aRewards_abi, allabis.iearn.aRewards_address)
+    	// contract.curveRewards = new state.web3.eth.Contract(allabis.iearn.sCurveRewards_abi, allabis.iearn.sCurveRewards_address)
+		// calls.push([contract.curveRewards._address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
     }
     if(['tbtc', 'ren', 'sbtc'].includes(contract.currentContract)) {
     	//initial_A
@@ -521,9 +519,9 @@ export async function init(contract, refresh = false) {
     window[contract.currentContract].aRewards = contract.aRewards
     contract.coins = []
     contract.underlying_coins = []
-    if(window.location.href.includes('withdraw_old')) 
+    if(window.location.href.includes('withdraw_old'))
       calls.push(...(await common.update_fee_info('old', contract, false)))
-  	else 
+  	else
       calls.push(...(await common.update_fee_info('new', contract, false)));
     for (let i = 0; i < allabis[contract.currentContract].N_COINS; i++) {
 	  	let coinsCall = contract.swap.methods.coins(i).encodeABI()
