@@ -252,7 +252,7 @@ let routes = [
     ]
   },
   {
-    path: '/:pool(susdv2)/',
+    path: '/:pool(y)/',
     name: 'Index',
     component: PoolApp,
     children: [
