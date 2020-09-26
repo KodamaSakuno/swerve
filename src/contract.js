@@ -439,6 +439,7 @@ export const getters = {
 
 export async function init(contract, refresh = false) {
 	state.multicall = state.multicall || window.tronWeb.contract(multicall_abi, multicall_address)
+
 	console.time('init')
 	//contract = contracts.compound for example
 	if(state.initializedContracts && contract.currentContract == state.currentContract && !refresh) return Promise.resolve();
@@ -531,7 +532,7 @@ export async function init(contract, refresh = false) {
     	calls.push([contract.swap._address, coinsCall])
     	calls.push([contract.swap._address, underlyingCoinsCall])
     }
-    await common.multiInitState(calls, contract, true)
+    // await common.multiInitState(calls, contract, true)
   	contract.initializedContracts = true;
   	console.timeEnd('init')
   	state.allInitContracts = new Set(state.allInitContracts.add(contract.currentContract))

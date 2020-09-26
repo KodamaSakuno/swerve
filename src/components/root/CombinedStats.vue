@@ -5,7 +5,7 @@
         </div>
 
 	    <total-balances/>
-	 	
+
 		<div class="window white" v-for='(currency, i) in Object.keys(filteredCurrencies)' :key="i">
 			  <p class='simple-error' v-show="currency == 'susd'"> Old susd pool. Please <router-link to="/susd/withdraw">withdraw and move</router-link> funds to <router-link to="/susdv2">susdv2</router-link> pool </p>
 		      <p class='text-center'>
@@ -180,8 +180,8 @@
 				        old_block: uint256 = cERC20(self.coins[i]).accrualBlockNumber()
 				        rate += rate * supply_rate * (block.number - old_block) / 10 ** 18
 				        */
-			         	if (contract.tethered && contract.tethered[i] 
-			         		&& contract.use_lending && !contract.use_lending[i] 
+			         	if (contract.tethered && contract.tethered[i]
+			         		&& contract.use_lending && !contract.use_lending[i]
 			         		|| key == 'susdv2' || (key == 'pax' && i == 3) || key == 'tbtc' || key == 'ren' || key == 'sbtc') {
 			            	this.all_c_rates[key].c_rates[i] = 1 / contract.coin_precisions[i]
 			         	}
@@ -220,7 +220,7 @@
 					    calls.push([
 					    	this.web3contracts[key].swap._address,
 					    	this.web3contracts[key].swap.methods.balances(i).encodeABI(),
-					    ])	
+					    ])
 				    }
 				    calls.push(
 				    	[
@@ -261,163 +261,87 @@
 			},
 
 			async update_fee_info(version = 'new') {
-			    let calls = await this.update_rates();
-				calls.push([contracts.susdv2.sCurveRewards_address, '0x70a08231000000000000000000000000' + (currentContract.default_account || '0x0000000000000000000000000000000000000000').slice(2)])
-				calls.push([contracts.sbtc.sCurveRewards_address, '0x70a08231000000000000000000000000' + (currentContract.default_account || '0x0000000000000000000000000000000000000000').slice(2)])
-				calls.push([contracts.iearn.sCurveRewards_address, '0x70a08231000000000000000000000000' + (currentContract.default_account || '0x0000000000000000000000000000000000000000').slice(2)])
-			    let aggcalls = await currentContract.multicall.methods.aggregate(calls).call();
-			    let block = aggcalls[0]
-			    let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
-			    let curveStakedBalance = decoded[decoded.length-3]
-			    let sbtcCurveStakedBalance = decoded[decoded.length-2]
-			    let yCurveStakedBalance = decoded[decoded.length-1]
-			    console.log(yCurveStakedBalance, "Y CURVE STAKED BALANCE")
-			    decoded = decoded.slice(0, decoded.length-1)
-			    let i = 0;
-			    this.bal_infos['usdt'] = []
-			    this.l_infos['usdt'] = []
-				for(let [key, contract] of Object.entries(this.allContracts)) {
-					this.bal_infos[key] = []
-					this.l_infos[key] = []
-					var total = 0;
-					let ind = i*16;
-					if(i > 1) ind-=5;
-					if(key == 'compound') {
-					    helpers.chunkArr(decoded.slice(ind, ind+8), 4).map((v, i) => {
-					    	// v is [rate, supply_rate, old_bloc, balance]
-				    	 	let rate = +v[0] / 1e18 / contracts[key].coin_precisions[i]
-			                let supply_rate = +v[1]
-			                let old_block = +v[2]
-			                let balance = +v[3]
-			                let calcRate = rate * (1 + supply_rate * (block - old_block) / 1e18);
-					        this.all_c_rates[key].c_rates[i] = calcRate;
-					        this.all_c_rates['usdt'].c_rates[i] = calcRate;
-					        let calcBalance = balance * this.all_c_rates[key].c_rates[i]
-					        this.bal_infos[key].push(calcBalance)
-					        total += calcBalance
-					    })
-					}
-				    if(key == 'usdt') {
-				    	this.bal_infos.usdt.push(this.all_c_rates['compound'].c_rates[0] * (+decoded[ind]))
-				    	this.bal_infos.usdt.push(this.all_c_rates['compound'].c_rates[1] * (+decoded[ind+1]))
-				    	this.all_c_rates[key].c_rates[2] = 1 / contracts[key].coin_precisions[2]
-				    	let calcBalance = +decoded[ind+2] * this.all_c_rates[key].c_rates[2]
-				    	ind-=5
-				    	this.bal_infos[key].push(calcBalance)
-				    	total += this.bal_infos.usdt[0] + this.bal_infos.usdt[1] + calcBalance
-				    }
-				    if(key == 'iearn' || key == 'busd' || key == 'susd' || key == 'susdnew') {
-				    	let slice = decoded.slice(ind, ind+contracts[key].N_COINS*2)
-				    	helpers.chunkArr(slice, 2).map((v, i) => {
-				    		//v is [rate, balance] or just [balance] for PAX in pax pool
-				    		if(v[1] === undefined) {
-				    			let balance = +v[0]
-				    			let calcBalance = this.all_c_rates[key].c_rates[i] * balance
-				    			this.bal_infos[key].push(calcBalance)
-				    			total += calcBalance
-				    		}
-				    		else {
-					    		let rate = +v[0] / 1e18 / contracts[key].coin_precisions[i]
-					    		if(key == 'susd' && i == 1) rate = +v[0] / 1e36
-					    		this.all_c_rates[key].c_rates[i] = rate
-					    		let balance = +v[1]
-					    		let calcBalance = rate*balance
-					    		this.bal_infos[key].push(calcBalance)
-					    		total += calcBalance
-				    		}
-				    	})
-				    	if(key == 'susd') ind -= 4
-				    }
-					if(key == 'susdv2') {
-						let N_COINS = contracts[key].N_COINS
-						let slice = decoded.slice(ind-N_COINS, ind)
-						for(let i = 0; i < 4; i++) {
-							let calcBalance = this.all_c_rates.susdv2.c_rates[i] * (slice[i])
-							this.bal_infos.susdv2.push(calcBalance)
-							total += calcBalance
-						}
-						ind-=N_COINS*2
-					}
-					if(key == 'pax') {
-						let slice = decoded.slice(ind-8, ind-1)
-						helpers.chunkArr(slice, 2).map((v, i) => {
-				    		//v is [rate, balance] or just [balance] for PAX in pax pool
-				    		if(v[1] === undefined) {
-				    			let balance = +v[0]
-				    			let calcBalance = this.all_c_rates[key].c_rates[i] * balance
-				    			this.bal_infos[key].push(calcBalance)
-				    			total += calcBalance
-				    		}
-				    		else {
-					    		let rate = +v[0] / 1e18 / contracts[key].coin_precisions[i]
-					    		this.all_c_rates[key].c_rates[i] = rate
-					    		let balance = +v[1]
-					    		let calcBalance = rate*balance
-					    		this.bal_infos[key].push(calcBalance)
-					    		total += calcBalance
-				    		}
-				    	})
-				    	ind -= 9;
-					}
-					if(['tbtc', 'ren'].includes(key)) {
-						let N_COINS = contracts[key].N_COINS
-						let start = 98
-						let slice = decoded.slice(start)
-						for(let i = 0; i < N_COINS; i++) {
-							let calcBalance = this.all_c_rates[key].c_rates[i] * (slice[i])
-							this.bal_infos[key].push(calcBalance)
-							total += calcBalance
-						}
-						ind = 92
-					}
-					if(key == 'sbtc') {
-						let N_COINS = contracts[key].N_COINS
-						let start = 108
-						let slice = decoded.slice(start)
-						for(let i = 0; i < N_COINS; i++) {
-							let calcBalance = this.all_c_rates[key].c_rates[i] * (slice[i])
-							this.bal_infos[key].push(calcBalance)
-							total += calcBalance
-						}
-						ind = 103
-					}
-				    this.totals.push(total)
-				    this.virtual_prices.push(+decoded[ind+8] / 1e18)
-				    this.As.push(+decoded[ind+9])
-				    this.future_As.push(+decoded[ind+10])
-				    this.admin_actions_deadlines.push(+decoded[ind+11])
+				await Promise.resolve();
+			    // let calls = await this.update_rates();
+				// calls.push([contracts.susdv2.sCurveRewards_address, '0x70a08231000000000000000000000000' + (currentContract.default_account || '0x0000000000000000000000000000000000000000').slice(2)])
+				// calls.push([contracts.sbtc.sCurveRewards_address, '0x70a08231000000000000000000000000' + (currentContract.default_account || '0x0000000000000000000000000000000000000000').slice(2)])
+				// calls.push([contracts.iearn.sCurveRewards_address, '0x70a08231000000000000000000000000' + (currentContract.default_account || '0x0000000000000000000000000000000000000000').slice(2)])
+			    // let aggcalls = await currentContract.multicall.methods.aggregate(calls).call();
+			    // let block = aggcalls[0]
+			    // let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
+			    // let curveStakedBalance = decoded[decoded.length-3]
+			    // let sbtcCurveStakedBalance = decoded[decoded.length-2]
+			    // let yCurveStakedBalance = decoded[decoded.length-1]
+			    // console.log(yCurveStakedBalance, "Y CURVE STAKED BALANCE")
+			    // decoded = decoded.slice(0, decoded.length-1)
+			    // let i = 0;
+			    // this.bal_infos['usdt'] = []
+			    // this.l_infos['usdt'] = []
+				// for(let [key, contract] of Object.entries(this.allContracts)) {
+				// 	this.bal_infos[key] = []
+				// 	this.l_infos[key] = []
+				// 	var total = 0;
+				// 	let ind = i*16;
+				// 	if(i > 1) ind-=5;
+				//     if(key == 'iearn' || key == 'busd' || key == 'susd' || key == 'susdnew') {
+				//     	let slice = decoded.slice(ind, ind+contracts[key].N_COINS*2)
+				//     	helpers.chunkArr(slice, 2).map((v, i) => {
+				//     		//v is [rate, balance] or just [balance] for PAX in pax pool
+				//     		if(v[1] === undefined) {
+				//     			let balance = +v[0]
+				//     			let calcBalance = this.all_c_rates[key].c_rates[i] * balance
+				//     			this.bal_infos[key].push(calcBalance)
+				//     			total += calcBalance
+				//     		}
+				//     		else {
+				// 	    		let rate = +v[0] / 1e18 / contracts[key].coin_precisions[i]
+				// 	    		if(key == 'susd' && i == 1) rate = +v[0] / 1e36
+				// 	    		this.all_c_rates[key].c_rates[i] = rate
+				// 	    		let balance = +v[1]
+				// 	    		let calcBalance = rate*balance
+				// 	    		this.bal_infos[key].push(calcBalance)
+				// 	    		total += calcBalance
+				//     		}
+				//     	})
+				//     	if(key == 'susd') ind -= 4
+				//     }
+				//     this.totals.push(total)
+				//     this.virtual_prices.push(+decoded[ind+8] / 1e18)
+				//     this.As.push(+decoded[ind+9])
+				//     this.future_As.push(+decoded[ind+10])
+				//     this.admin_actions_deadlines.push(+decoded[ind+11])
 
 
-				    this.fees.push(+decoded[ind+12] / 1e8)
-		    		this.admin_fees.push(+decoded[ind+13])
-		    		this.totalTokenBalances.push(+decoded[ind+14])
-		    		this.totalTokenSupplies.push(+decoded[ind+15])
-		    		var totalShare = 0
-				    for (let i=0; i < contracts[key].N_COINS; i++) {
-		                var val = this.bal_infos[key][i] * (+decoded[ind+14]) / (+decoded[ind+15]);
-		                this.l_infos[key].push(val)
-		                totalShare += val;
-		            }
-		            this.usdShares.push(decoded[ind+14] * decoded[ind+8] / 1e36)
-	            	this.totalShares.push(totalShare)
-	            	if(['susdv2', 'sbtc', 'y', 'iearn'].includes(key)) {
-	            		let stakedBalance = curveStakedBalance
-	            		if(key == 'sbtc') stakedBalance = sbtcCurveStakedBalance
-	            		if(['y', 'iearn'].includes(key)) stakedBalance = yCurveStakedBalance
-	            		this.totalStakes[key] = 0
-	            		this.staked_infos[key] = []
-	            		if(stakedBalance > 0) {
-	            			for(let i=0; i < contracts[key].N_COINS; i++) {
-	            				var val = this.bal_infos[key][i] * stakedBalance / (+decoded[ind+15]);
-	            				Vue.set(this.staked_infos[key], i, val)
-	            				this.totalStakes[key] += val
-	            			}
-	            		}
-	            		this.usdStakes[key] = stakedBalance * decoded[ind+8] / 1e36
-	            	}
+				//     this.fees.push(+decoded[ind+12] / 1e8)
+		    	// 	this.admin_fees.push(+decoded[ind+13])
+		    	// 	this.totalTokenBalances.push(+decoded[ind+14])
+		    	// 	this.totalTokenSupplies.push(+decoded[ind+15])
+		    	// 	var totalShare = 0
+				//     for (let i=0; i < contracts[key].N_COINS; i++) {
+		        //         var val = this.bal_infos[key][i] * (+decoded[ind+14]) / (+decoded[ind+15]);
+		        //         this.l_infos[key].push(val)
+		        //         totalShare += val;
+		        //     }
+		        //     this.usdShares.push(decoded[ind+14] * decoded[ind+8] / 1e36)
+	            // 	this.totalShares.push(totalShare)
+	            // 	if(['susdv2', 'sbtc', 'y', 'iearn'].includes(key)) {
+	            // 		let stakedBalance = curveStakedBalance
+	            // 		if(key == 'sbtc') stakedBalance = sbtcCurveStakedBalance
+	            // 		if(['y', 'iearn'].includes(key)) stakedBalance = yCurveStakedBalance
+	            // 		this.totalStakes[key] = 0
+	            // 		this.staked_infos[key] = []
+	            // 		if(stakedBalance > 0) {
+	            // 			for(let i=0; i < contracts[key].N_COINS; i++) {
+	            // 				var val = this.bal_infos[key][i] * stakedBalance / (+decoded[ind+15]);
+	            // 				Vue.set(this.staked_infos[key], i, val)
+	            // 				this.totalStakes[key] += val
+	            // 			}
+	            // 		}
+	            // 		this.usdStakes[key] = stakedBalance * decoded[ind+8] / 1e36
+	            // 	}
 
-	            	i++;
-				}
+	            // 	i++;
+				// }
 			},
 
 

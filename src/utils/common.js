@@ -19,7 +19,7 @@ export function approve(contract, amount, account, toContract) {
     return new Promise((resolve, reject) => {
                 contract.methods.approve(toContract, cBN(amount).toFixed(0,1))
                 .send({
-                    from: account, 
+                    from: account,
                     gasPrice: gasPriceStore.state.gasPriceWei,
                     gas: 100000,
                 })
@@ -43,7 +43,7 @@ export function approve_to_migrate(amount, account) {
     return new Promise(resolve => {
                 currentContract.old_swap_token.methods.approve(currentContract.migration_address, amount)
                 .send({
-                    from: account, 
+                    from: account,
                     gasPrice: gasPriceStore.state.gasPriceWei,
                     gas: 100000,
                 })
@@ -64,7 +64,7 @@ export async function ensure_allowance_zap_out(amount, fromContract, toContract,
     if(!toContract) toContract = allabis[currentContract.currentContract].deposit_address
     let allowance = cBN(await currentContract.swap_token.methods.allowance(default_account, toContract).call())
     if(!infinite) {
-        if(allowance.lt(cBN(amount))) {    
+        if(allowance.lt(cBN(amount))) {
             if(allowance > 0) await approve(fromContract, 0, default_account, toContract)
             await approve(fromContract, amount, default_account, toContract)
         }
@@ -254,49 +254,50 @@ export function update_rates(version = 'new', contract) {
 }
 
 export async function update_fee_info(version = 'new', contract, update = true) {
-    console.time('updatefeeinfo')
-    let web3 = currentContract.web3 || new Web3(infura_url)
-    if(!contract) contract = currentContract
-    var swap_abi_stats = allabis[contract.currentContract].swap_abi;
-    var swap_address_stats = allabis[contract.currentContract].swap_address;
-    var swap_token_stats = allabis[contract.currentContract].swap_token
-    var swap_token_address = allabis[contract.currentContract].token_address
-    var swap_stats = contract.swap;
-    var swap_token_stats = contract.swap_token;
-    if(version == 'old') {
-        swap_abi_stats = allabis[contract.currentContract].old_swap_abi;
-        swap_address_stats = allabis[contract.currentContract].old_swap_address;
-        swap_stats = contract.old_swap;
-        swap_token_stats = contract.old_swap_token;
-        swap_token_address = allabis[contract.currentContract].token_address
-    }
+    await Promise.resolve();
+    // console.time('updatefeeinfo')
+    // let web3 = currentContract.web3 || new Web3(infura_url)
+    // if(!contract) contract = currentContract
+    // var swap_abi_stats = allabis[contract.currentContract].swap_abi;
+    // var swap_address_stats = allabis[contract.currentContract].swap_address;
+    // var swap_token_stats = allabis[contract.currentContract].swap_token
+    // var swap_token_address = allabis[contract.currentContract].token_address
+    // var swap_stats = contract.swap;
+    // var swap_token_stats = contract.swap_token;
+    // if(version == 'old') {
+    //     swap_abi_stats = allabis[contract.currentContract].old_swap_abi;
+    //     swap_address_stats = allabis[contract.currentContract].old_swap_address;
+    //     swap_stats = contract.old_swap;
+    //     swap_token_stats = contract.old_swap_token;
+    //     swap_token_address = allabis[contract.currentContract].token_address
+    // }
 
-    var default_account = contract.default_account || '0x0000000000000000000000000000000000000000';
-    let calls = [   
-                    //.fee()
-                    [swap_address_stats, swap_stats.methods.fee().encodeABI()],
-                    //.admin_fee()
-                    [swap_address_stats, swap_stats.methods.admin_fee().encodeABI()],
-                    //balanceOf(default_account)
-                    [swap_token_address, swap_token_stats.methods.balanceOf(default_account).encodeABI()],
-                    //token_supply()
-                    [swap_token_address, swap_token_stats.methods.totalSupply().encodeABI()],
-                    ]
-    let rates_calls = update_rates(version, contract);
+    // var default_account = contract.default_account || '0x0000000000000000000000000000000000000000';
+    // let calls = [
+    //                 //.fee()
+    //                 [swap_address_stats, swap_stats.methods.fee().encodeABI()],
+    //                 //.admin_fee()
+    //                 [swap_address_stats, swap_stats.methods.admin_fee().encodeABI()],
+    //                 //balanceOf(default_account)
+    //                 [swap_token_address, swap_token_stats.methods.balanceOf(default_account).encodeABI()],
+    //                 //token_supply()
+    //                 [swap_token_address, swap_token_stats.methods.totalSupply().encodeABI()],
+    //                 ]
+    // let rates_calls = update_rates(version, contract);
 
-    let swap = new web3.eth.Contract(swap_abi_stats, swap_address_stats);
-    for (let i = 0; i < allabis[contract.currentContract].N_COINS; i++) {
-        //swap.methods.balances(i)
-        calls.push([swap_address_stats, swap.methods.balances(i).encodeABI()])
-    }
-    calls.push(...rates_calls)
-    if(['susdv2','sbtc', 'iearn', 'y'].includes(contract.currentContract) && update)
-        calls.push([allabis[contract.currentContract].sCurveRewards_address, contract.curveRewards.methods.balanceOf(default_account).encodeABI()])
-    if(update)
-        await multiInitState(calls, contract)
-    return calls
-    
-    console.timeEnd('updatefeeinfo')
+    // let swap = new web3.eth.Contract(swap_abi_stats, swap_address_stats);
+    // for (let i = 0; i < allabis[contract.currentContract].N_COINS; i++) {
+    //     //swap.methods.balances(i)
+    //     calls.push([swap_address_stats, swap.methods.balances(i).encodeABI()])
+    // }
+    // calls.push(...rates_calls)
+    // if(['susdv2','sbtc', 'iearn', 'y'].includes(contract.currentContract) && update)
+    //     calls.push([allabis[contract.currentContract].sCurveRewards_address, contract.curveRewards.methods.balanceOf(default_account).encodeABI()])
+    // if(update)
+    //     await multiInitState(calls, contract)
+    // return calls
+
+    // console.timeEnd('updatefeeinfo')
 }
 
 function checkTethered(contract, i) {
@@ -316,10 +317,10 @@ export async function multiInitState(calls, contract, initContracts = false) {
     catch(err) {
         console.error(err)
         aggcalls = await multicall.methods.aggregate(calls.slice(1)).call()
-        aggcalls[1] = [web3.eth.abi.encodeParameter('uint256', cBN(1e18).toFixed(0)), ...aggcalls[1]] 
+        aggcalls[1] = [web3.eth.abi.encodeParameter('uint256', cBN(1e18).toFixed(0)), ...aggcalls[1]]
     }
     var block = +aggcalls[0]
-    //initContracts && contract.currentContract == 'compound' && i == 0 || 
+    //initContracts && contract.currentContract == 'compound' && i == 0 ||
     let decoded = aggcalls[1].map((hex, i) =>
         (i >= aggcalls[1].length-allabis[contract.currentContract].N_COINS*2) ? web3.eth.abi.decodeParameter('address', hex) : web3.eth.abi.decodeParameter('uint256', hex)
     )
@@ -396,7 +397,7 @@ export async function multiInitState(calls, contract, initContracts = false) {
             if(checkTethered(contract, i) || contract.currentContract == 'susdv2') {
                 Vue.set(contract.c_rates, i, 1 / allabis[contract.currentContract].coin_precisions[i]);
             }
-            else {            
+            else {
                 let rate = +v[0] / 1e18 / allabis[contract.currentContract].coin_precisions[i]
                 let supply_rate = +v[1]
                 let old_block = +v[2]

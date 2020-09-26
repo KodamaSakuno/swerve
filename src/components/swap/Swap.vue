@@ -6,13 +6,7 @@
                     <fieldset class='item'>
                         <legend>From:</legend>
                         <div class='maxbalance' @click='set_max_balance'>
-                            Max: 
-                            <span 
-                                v-show="(currentPool == 'susdv2' && from_currency == 3 || currentPool == 'sbtc' && from_currency == 2)
-                                         && maxBalanceText != '0.00'"
-                            >
-                                {{maxSynthText}}/
-                            </span>
+                            Max:
                             <span>{{maxBalanceText}}</span>
                             <span v-show='susdWaitingPeriod' class='susd-waiting-period'>
                                 <span class='tooltip'>
@@ -20,13 +14,6 @@
                                     <span class='tooltiptext'>
                                         Cannot transfer during waiting period. {{ (susdWaitingPeriodTime).toFixed(0) }} secs left.
                                     </span>
-                                </span>
-                            </span>
-                            <span v-show="(currentPool == 'susdv2' && from_currency == 3 || currentPool == 'sbtc' && from_currency == 2)
-                                            && maxBalanceText != '0.00'" 
-                                class='tooltip'> [?]
-                                <span class='tooltiptext long'>
-                                    Max transferrable amount is {{ maxSynthText }}. You can free the remaining balance by settling.
                                 </span>
                             </span>
                         </div>
@@ -46,8 +33,8 @@
                             <li class='coins' v-for='(currency, i) in Object.keys(currencies)' :key="i">
                                 <input type="radio" :id="'from_cur_'+i" name="from_cur" :value='i' v-model='from_currency'>
                                 <label :for="'from_cur_'+i">
-                                    <img 
-                                        :class="{'token-icon': true, [currency+'-icon']: true, 'y': swapwrapped}" 
+                                    <img
+                                        :class="{'token-icon': true, [currency+'-icon']: true, 'y': swapwrapped}"
                                         :src='getTokenIcon(currency)'>
                                     <span v-show="!swapwrapped && !['tbtc', 'ren', 'sbtc'].includes(currentPool)">{{currency | capitalize}}</span>
                                     <span v-show="swapwrapped || ['tbtc', 'ren', 'sbtc'].includes(currentPool)">{{currencies[currency]}}</span>
@@ -63,10 +50,10 @@
                         <div class='maxbalance2'>Max: <span></span> </div>
                         <ul>
                             <li>
-                                <input type="text" 
-                                id="to_currency" 
-                                name="to_currency" 
-                                value="0.00" 
+                                <input type="text"
+                                id="to_currency"
+                                name="to_currency"
+                                value="0.00"
                                 disabled
                                 :style = "{backgroundColor: bgColor}"
                                 v-model='toInput'>
@@ -80,8 +67,8 @@
                             <li class='coins' v-for='(currency, i) in Object.keys(currencies)' :key="i">
                                 <input type="radio" :id="'to_cur_'+i" name="to_cur" :value='i' v-model='to_currency'>
                                 <label :for="'to_cur_'+i">
-                                    <img 
-                                        :class="{'token-icon': true, [currency+'-icon']: true, 'y': swapwrapped}" 
+                                    <img
+                                        :class="{'token-icon': true, [currency+'-icon']: true, 'y': swapwrapped}"
                                         :src='getTokenIcon(currency)'>
                                     <span v-show="!swapwrapped && !['tbtc', 'ren'].includes(currentPool)">{{currency | capitalize}}</span>
                                     <span v-show="swapwrapped || ['tbtc', 'ren'].includes(currentPool)">{{currencies[currency]}}</span>
@@ -95,7 +82,7 @@
                     <span @click='swapExchangeRate' class='clickable underline'>
                         {{getPair(swaprate)}}
                         <img src='@/assets/sync-solid.svg' class='swaprates-icon'>
-                    </span> (including fees): 
+                    </span> (including fees):
                     <span id="exchange-rate" @click='swapExchangeRate' class='clickable'>
                         {{exchangeRateSwapped}}
                     </span>
@@ -113,7 +100,7 @@
                     </li>
                     <li>
                         <input id='swapw' type='checkbox' name='swapw' v-model = 'swapwrapped'>
-                        <label for='swapw' v-show = "!['susdv2', 'tbtc', 'ren', 'sbtc'].includes(currentPool)">Swap wrapped</label>
+                        <label for='swapw'>Swap wrapped</label>
                     </li>
                 </ul>
                 <div>
@@ -125,7 +112,7 @@
                     <div v-show='showadvancedoptions'>
                         <fieldset>
                             <legend>Advanced options:</legend>
-                            <div id='max_slippage'><span>Max slippage:</span> 
+                            <div id='max_slippage'><span>Max slippage:</span>
                                 <input id="slippage05" type="radio" name="slippage" value='0.005' @click='maxSlippage = 0.5; customSlippageDisabled = true'>
                                 <label for="slippage05">0.5%</label>
 
@@ -150,14 +137,8 @@
                 <p class='simple-error' v-show="exchangeRate<=0.98 && (to_currency > 0 && !['ren', 'sbtc'].includes(currentPool))">
                     Warning! Exchange rate is too low!
                 </p>
-                <p class='simple-error' v-show="exchangeRate<=0.98 && ['ren', 'sbtc'].includes(currentPool)">
-                    Warning! Exchange rate is too low!
-                </p>
                 <p class='simple-error' v-show="exchangeRate<=0.95 && (to_currency == 0 && !['ren', 'sbtc'].includes(currentPool))">
                     Warning! Exchange rate is too low!
-                </p>
-                <p class='trade-buttons' v-show="['ren', 'sbtc'].includes(currentPool)">
-                    <a href='https://bridge.renproject.io/'>Mint/redeem renBTC</a>
                 </p>
                 <!-- <p class='simple-error' id='no-balance-synth' v-show='notEnoughBalanceSynth'>
                     Max balance you can use is {{ (+maxSynthBalance).toFixed(2) }}
@@ -172,7 +153,7 @@
                     <span class='loading line'></span>
                 </div>
                 <p class='simple-error' id='no-balance' v-show='selldisabled'>
-                    Not enough balance for 
+                    Not enough balance for
                     <span v-show='!swapwrapped'>{{Object.keys(currencies)[from_currency] | capitalize}}</span>
                     <span v-show='swapwrapped'>{{Object.values(currencies)[from_currency]}}</span>. <span>Swap is not available.</span>
                 </p>
@@ -241,7 +222,7 @@
             coins: [],
             c_rates: [],
             get showadvancedoptions() {
-                return localStorage.getItem('advancedoptions') === 'true' 
+                return localStorage.getItem('advancedoptions') === 'true'
                     || +this.fromInput > 5000 || (['ren', 'sbtc'].includes(currentContract.currentContract) && +this.fromInput > 0.5)
             },
             set showadvancedoptions(val) {
@@ -251,7 +232,7 @@
             show_loading: false,
             waitingMessage: '',
             userInteracted: false,
-            
+
             estimateGas: 0,
             ethPrice: 0,
             icontype: '',
@@ -299,7 +280,7 @@
                     let j = this.to_currency
                     let promises = await Promise.all([helpers.getETHPrice()])
                     this.ethPrice = promises[0]
-                    this.estimateGas = this.swapwrapped ? 
+                    this.estimateGas = this.swapwrapped ?
                                             contractGas.swap[this.currentPool].exchange(i, j) / 2 : contractGas.swap[this.currentPool].exchange_underlying(i, j) / 2
                 },
                 immediate: true
@@ -315,17 +296,14 @@
             },
             actualFromValue() {
                 if(!this.swapwrapped && !['ren','sbtc'].includes(this.currentPool)) return;
-                if(['ren', 'sbtc'].includes(this.currentPool)) return (this.fromInput * this.btcPrice).toFixed(2)
                 return (this.fromInput * this.c_rates[this.from_currency] * this.toFixed(this.precisions[this.from_currency]))
             },
             actualToValue() {
                 if(!this.swapwrapped && !['ren', 'sbtc'].includes(this.currentPool)) return;
-                if(['ren', 'sbtc'].includes(this.currentPool)) return (this.toInput * this.btcPrice).toFixed(2)
                 return (this.toInput * this.c_rates[this.to_currency] * this.toFixed(this.precisions[this.to_currency]))
             },
             ...getters,
             minAmount() {
-                if(['tbtc', 'ren', 'sbtc'].includes(currentContract.currentContract)) return 1e-8
                 return 0.01
             },
             selldisabled() {
@@ -360,11 +338,9 @@
         mounted() {
             if(currentContract.initializedContracts) this.mounted();
         },
-        methods: { 
+        methods: {
             async mounted() {
                 console.log(currentContract.default_account)
-                if(['ren', 'sbtc'].includes(currentContract.currentContract)) this.btcPrice = await priceStore.getBTCPrice()
-                if(['tbtc', 'ren', 'sbtc'].includes(currentContract.currentContract)) this.fromInput = '0.0001'
                 this.c_rates = currentContract.c_rates
                 this.coins = currentContract.underlying_coins
                 if(this.swapwrapped) {
@@ -388,12 +364,11 @@
             toFixed(num) {
                 if(num == '' || num == undefined || +num == 0) return '0.00'
                 if(!BigNumber.isBigNumber(num)) num = +num
-                if(['tbtc', 'ren', 'sbtc'].includes(currentContract.currentContract)) return num.toFixed(8)
                 return num.toFixed(2)
             },
             getCurrency(i) {
                 if(!this.swapwrapped && !['susdv2', 'tbtc', 'ren', 'sbtc'].includes(this.currentPool)) return (Object.keys(this.currencies)[i]).toUpperCase()
-                return Object.values(this.currencies)[i] 
+                return Object.values(this.currencies)[i]
             },
             swapInputs() {
                 //look no temp variable! :D
@@ -461,14 +436,7 @@
                 await this.set_to_amount();
             },
             async set_max_balance() {
-                let balance
-                if(this.currentPool == 'susdv2' && this.from_currency == 3 ||
-                    this.currentPool == 'sbtc' && this.from_currency == 2) {
-                    balance = await this.coins[this.from_currency].methods.transferableSynths(this.default_account).call();
-                    if(this.susdWaitingPeriod) balance = 0
-                }
-                else
-                    balance = await this.coins[this.from_currency].methods.balanceOf(currentContract.default_account).call();
+                let balance = await this.coins[this.from_currency].methods.balanceOf(currentContract.default_account).call();
                 let amount = cBN(balance).div(this.precisions[this.from_currency]).toFixed()
                 this.fromInput = currentContract.default_account ? amount : 0
                 await this.set_to_amount();
@@ -487,10 +455,10 @@
                 if(this.currentPool == 'susdv2' && i == 3 || this.currentPool == 'sbtc' && i == 2) {
                     balanceCalls.push([this.coins[i]._address, this.coins[i].methods.transferableSynths(this.default_account).encodeABI()])
                     let currencyKey = '0x7355534400000000000000000000000000000000000000000000000000000000'
-                    if(this.currentPool == 'sbtc') 
+                    if(this.currentPool == 'sbtc')
                         currencyKey = '0x7342544300000000000000000000000000000000000000000000000000000000'
                     balanceCalls.push([
-                        currentContract.snxExchanger._address, 
+                        currentContract.snxExchanger._address,
                         currentContract.snxExchanger.methods
                         .maxSecsLeftInWaitingPeriod(currentContract.default_account, currencyKey)
                         .encodeABI()
@@ -501,17 +469,9 @@
                 let amounts = balances.map(balance => currentContract.default_account ? balance : 0)
                 this.maxBalance = amounts[0]
                 let highlight_red = this.fromInput > this.maxBalance / this.precisions[this.from_currency]
-                if(this.currentPool == 'susdv2' && i == 3 || this.currentPool == 'sbtc' && i == 2) {
-                    this.maxSynthBalance = cBN(amounts[1]).div(1e18).toFixed()
-                    this.susdWaitingPeriod = (+amounts[2] != 0)
-                    this.susdWaitingPeriodTime = +amounts[2]
-                    console.log(this.maxSynthBalance, "MAX SYNTH BALANCE", this.susdWaitingPeriod, "SUSD WAITING PERIOD")
-                    highlight_red = this.fromInput > this.maxSynthBalance
-                    if(this.susdWaitingPeriod) highlight_red = true
-                }
-                if(highlight_red) 
+                if(highlight_red)
                     this.fromBgColor = '#2f3437'
-                else 
+                else
                     this.fromBgColor = '#2f3437'
             },
             setAmountPromise() {
@@ -549,7 +509,7 @@
                 if(this.loadingAction) return;
                 this.userInteracted = true
                 this.setLoadingAction();
-                
+
                 this.show_loading = true;
                 var i = this.from_currency
                 var j = this.to_currency;
@@ -562,14 +522,6 @@
                 var dx = Math.floor(this.fromInput * this.precisions[i]);
                 if(BN(this.maxBalance).gt(0) && BN(this.maxBalance).div(this.precisions[i]).minus(BN(this.fromInput)).lt(BN(this.minAmount))) {
                     dx = this.maxBalance
-                }
-                if(
-                    (this.currentPool == 'susdv2' && this.from_currency == 3 ||
-                        this.currentPool == 'sbtc' && this.from_currency == 2) &&
-                    BN(this.maxSynthBalance).gt(0) && 
-                    BN(this.maxSynthBalance).minus(BN(this.fromInput)).lt(BN(this.minAmount))
-                ) {
-                    dx = BN(this.maxSynthBalance).times(1e18).toFixed(0,1)
                 }
                 let min_dy_method = 'get_dy_underlying'
                 if(this.swapwrapped || ['susdv2', 'tbtc', 'ren', 'sbtc'].includes(this.currentPool)) {
@@ -594,7 +546,7 @@
                     throw err;
                 }
                 dismiss()
-                this.waitingMessage = `Please confirm swap 
+                this.waitingMessage = `Please confirm swap
                                         from ${this.fromInput} ${this.getCurrency(this.from_currency)}
                                         for min ${this.toFixed(min_dy / this.precisions[j])} ${this.getCurrency(this.to_currency)}`
                 var { dismiss } = notifyNotification(this.waitingMessage)
@@ -607,13 +559,13 @@
                         .send({
                             from: currentContract.default_account,
                             gasPrice: this.gasPriceWei,
-                            gas: this.swapwrapped ? 
+                            gas: this.swapwrapped ?
                                     contractGas.swap[this.currentPool].exchange(i, j) : contractGas.swap[this.currentPool].exchange_underlying(i, j),
                         })
                         .once('transactionHash', hash => {
                             dismiss()
                             notifyHandler(hash)
-                            this.waitingMessage = `Waiting for swap 
+                            this.waitingMessage = `Waiting for swap
                                                     <a href='https://etherscan.io/tx/${hash}'>transaction</a>
                                                     to confirm: no further action needed`
                         })
