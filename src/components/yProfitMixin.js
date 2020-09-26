@@ -59,14 +59,14 @@ export default {
 			let curveRewards = currentContract.curveRewards
 			let aRewards = currentContract.aRewards
 			let calls = [
-				[curveRewards._address, curveRewards.methods.earned(this.account).encodeABI()],
-				[curveRewards._address, curveRewards.methods.balanceOf(this.account).encodeABI()],
-				[curveRewards._address, curveRewards.methods.userRewardPerTokenPaid(this.account).encodeABI()],
-				[curveRewards._address, curveRewards.methods.totalSupply().encodeABI()],
-				[curveRewards._address, curveRewards.methods.DURATION().encodeABI()],
-				[curveRewards._address, curveRewards.methods.rewardRate().encodeABI()],
-				[aRewards._address, aRewards.methods.claimable(this.account).encodeABI()],
-				[curveRewards._address, curveRewards.methods.periodFinish().encodeABI()],
+				[curveRewards.address, curveRewards.methods.earned(this.account).encodeABI()],
+				[curveRewards.address, curveRewards.methods.balanceOf(this.account).encodeABI()],
+				[curveRewards.address, curveRewards.methods.userRewardPerTokenPaid(this.account).encodeABI()],
+				[curveRewards.address, curveRewards.methods.totalSupply().encodeABI()],
+				[curveRewards.address, curveRewards.methods.DURATION().encodeABI()],
+				[curveRewards.address, curveRewards.methods.rewardRate().encodeABI()],
+				[aRewards.address, aRewards.methods.claimable(this.account).encodeABI()],
+				[curveRewards.address, curveRewards.methods.periodFinish().encodeABI()],
 			]
 			let now = Date.now() / 1000
 			let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
@@ -100,7 +100,7 @@ export default {
 	    	let available = 0;
 	    	for(let i = 0; i < prices.length; i++) {
 	            let curr = Object.keys(this.ADDRESSES)[i]
-	            
+
 	            const getPricePerFullShare = await currentContract.web3.eth.call({
 	                to: this.ADDRESSES[curr],
 	                data: '0x77c7b8fc',
@@ -131,7 +131,7 @@ export default {
 		        fromBlock = '0x'+parseInt(block-1).toString(16)
 		        toBlock = '0x'+parseInt(block+1).toString(16)
 		    }
-		    let underlying_addresses = currentContract.underlying_coins.map(c=>c._address)
+		    let underlying_addresses = currentContract.underlying_coins.map(c=>c.address)
 		    let index = underlying_addresses.indexOf(address);
 		    let yaddress = Object.values(this.ADDRESSES)[index];
 		    let mints;
@@ -194,12 +194,12 @@ export default {
 	            let tokens = cTokens[i];
 		        if(tokens == 0) continue;
 		        console.log(i)
-		        let usd = await this.getExchangeRate(block, currentContract.underlying_coins[i]._address, '', type)
+		        let usd = await this.getExchangeRate(block, currentContract.underlying_coins[i].address, '', type)
 		        if(i == 0 || i == 3) tokens /= 1e16
 		        else tokens /= 1e4
 		        console.log(tokens, "TOKENS", usd, "EXCHANGE RATE", tokens * usd, "USD")
 		        amount += tokens * usd;
- 
+
 		    }
 		    return amount;
 		},*/

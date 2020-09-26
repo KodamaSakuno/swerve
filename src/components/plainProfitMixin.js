@@ -112,22 +112,22 @@ export default {
 
 			let curveRewards = currentContract.curveRewards
 			let calls = [
-				[curveRewards._address, curveRewards.methods.earned(this.account).encodeABI()],
-				[curveRewards._address, curveRewards.methods.balanceOf(this.account).encodeABI()],
-				[curveRewards._address, curveRewards.methods.userRewardPerTokenPaid(this.account).encodeABI()],
-				[curveRewards._address, curveRewards.methods.totalSupply().encodeABI()],
+				[curveRewards.address, curveRewards.methods.earned(this.account).encodeABI()],
+				[curveRewards.address, curveRewards.methods.balanceOf(this.account).encodeABI()],
+				[curveRewards.address, curveRewards.methods.userRewardPerTokenPaid(this.account).encodeABI()],
+				[curveRewards.address, curveRewards.methods.totalSupply().encodeABI()],
 			]
 			if(currentContract.currentContract == 'sbtc') {
                 let balancerPool = new currentContract.web3.eth.Contract(balancer_ABI, balancer_address)
 				calls.push(
-					[balancerPool._address, balancerPool.methods.totalSupply().encodeABI()],
-                    [balancerPool._address, balancerPool.methods.getBalance('0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f').encodeABI()],
-                    [balancerPool._address, balancerPool.methods.getBalance('0x408e41876cccdc0f92210600ef50372656052a38').encodeABI()],
+					[balancerPool.address, balancerPool.methods.totalSupply().encodeABI()],
+                    [balancerPool.address, balancerPool.methods.getBalance('0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f').encodeABI()],
+                    [balancerPool.address, balancerPool.methods.getBalance('0x408e41876cccdc0f92210600ef50372656052a38').encodeABI()],
                 )
 			}
-			calls.push([curveRewards._address, curveRewards.methods.DURATION().encodeABI()],
-					[curveRewards._address, curveRewards.methods.rewardRate().encodeABI()],
-					[curveRewards._address, curveRewards.methods.periodFinish().encodeABI()],
+			calls.push([curveRewards.address, curveRewards.methods.DURATION().encodeABI()],
+					[curveRewards.address, curveRewards.methods.rewardRate().encodeABI()],
+					[curveRewards.address, curveRewards.methods.periodFinish().encodeABI()],
 			)
 			let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
 			let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
@@ -177,7 +177,7 @@ export default {
 					]
 				})
 				let rewards = rewardLogs.map(log=>currentContract.web3.eth.abi.decodeParameter('uint256', log.data) / 1e18).reduce((a, b) => a + b, 0)
-				
+
 				this.paidRewardsSNX = rewards * decoded[4] / decoded[3]
 				this.paidRewardsREN = rewards * decoded[5] / decoded[3]
 			}
@@ -202,12 +202,12 @@ export default {
 	            let tokens = cTokens[i];
 		        if(tokens == 0) continue;
 		        console.log(i)
-		        let usd = await this.getExchangeRate(block, currentContract.underlying_coins[i]._address, '', type)
+		        let usd = await this.getExchangeRate(block, currentContract.underlying_coins[i].address, '', type)
 		        if(i == 0 || i == 3) tokens /= 1e16
 		        else tokens /= 1e4
 		        console.log(tokens, "TOKENS", usd, "EXCHANGE RATE", tokens * usd, "USD")
 		        amount += tokens * usd;
- 
+
 		    }
 		    return amount;
 		},*/

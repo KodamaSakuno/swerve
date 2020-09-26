@@ -2,12 +2,12 @@
     <div>
 
         <div class='swap exchange'>
-            
+
             <div class='exchangefields'>
                 <fieldset class='item'>
                     <legend>From:</legend>
                     <div class='maxbalance' :class="{'loading line': maxBalance == -1}" @click='set_max_balance'>
-                        Max: 
+                        Max:
                         <span v-show='maxSynthBalance  != -1 && [5,9].includes(from_currency)'> {{ maxSynthBalanceText }} / </span>
                         <span v-show = 'maxBalance != -1'>{{maxBalanceText}}</span>
                         <span v-show='susdWaitingPeriod' class='susd-waiting-period'>
@@ -52,10 +52,10 @@
                     <div class='maxbalance2'>Max: <span></span> </div>
                     <ul>
                         <li>
-                            <input type="text" 
-                            id="to_currency" 
-                            name="to_currency" 
-                            value="0.00" 
+                            <input type="text"
+                            id="to_currency"
+                            name="to_currency"
+                            value="0.00"
                             disabled
                             :style = "{backgroundColor: bgColor}"
                             v-model='toInput'>
@@ -75,7 +75,7 @@
                 </fieldset>
             </div>
                 <p v-show='fromInput > 0' class='exchange-rate'>
-                    Exchange rate 
+                    Exchange rate
                     <span @click='swapExchangeRate' class='clickable underline'>
                         {{getPair(swaprate)}}
                         <img src='@/assets/sync-solid.svg' class='swaprates-icon'>
@@ -85,7 +85,7 @@
                     </span>
                 </p>
                 <p v-show='fromInput > 0' class='best-pool-text'>
-                    Trade routed through: 
+                    Trade routed through:
                     <span id="best-pool">
                         <span v-show="bestPoolText != '1split'">
                             {{bestPoolText}}
@@ -143,7 +143,7 @@
                             <input id='sbtcpool' type='checkbox' value='sbtc' v-model='pools'/>
                             <label for='sbtcpool'>sBTC</label>
                         </div>
-                        <div v-show='fromInput > 0' id='max_slippage'><span>Max slippage:</span> 
+                        <div v-show='fromInput > 0' id='max_slippage'><span>Max slippage:</span>
                             <input id="slippage05" type="radio" name="slippage" value='0.005' @click='maxSlippage = 0.5; customSlippageDisabled = true'>
                             <label for="slippage05">0.5%</label>
 
@@ -190,7 +190,7 @@
                 Estimated tx cost: {{ (+estimateGas).toFixed(2) }}$
             </div>
             <p class='simple-error' id='no-balance' v-show='showNoBalanceWarning'>
-                Not enough balance for 
+                Not enough balance for
                 <span v-show='!swapwrapped'>{{Object.keys(currencies)[from_currency] | capitalize}}</span>
                 <span v-show='swapwrapped'>{{Object.values(currencies)[from_currency]}}</span>. <span>Swap is not available.</span>
             </p>
@@ -276,7 +276,7 @@
             swapwrapped: false,
             bestPool: null,
             get showadvancedoptions() {
-                return localStorage.getItem('advancedoptions') === 'true' 
+                return localStorage.getItem('advancedoptions') === 'true'
                     || +this.fromInput > 5000 || ([7,8,9].includes(this.from_currency) && +this.fromInput > 0.5)
             },
             set showadvancedoptions(val) {
@@ -295,7 +295,7 @@
         computed: {
             //onesplit exchanges [uniswap, kyber, bancor, oasis, cCurve, tCurve, yCurve, bCurve, sCurve]
             CONTRACT_FLAG() {
-                //disable uniswap, kyber, bancor, oasis, compound, fulcrum, chai, aave, smart token, bdai, iearn, weth, idle, 
+                //disable uniswap, kyber, bancor, oasis, compound, fulcrum, chai, aave, smart token, bdai, iearn, weth, idle,
                     //mooniswap, uniswap v2 all, dforce
                 //enable multipath DAI, multipath USDC
                 //enabled curve compound, curve usdt, curve y, curve binance, curve susd, curve pax
@@ -366,13 +366,13 @@
                 return (this.toInput * this.c_rates(this.to_currency)[this.to_currency] * this.precisions(this.to_currency)).toFixed(2)
             },
             bestPoolText() {
-                // if((this.from_currency == 6 && [3,4,5].includes(this.to_currency)) 
+                // if((this.from_currency == 6 && [3,4,5].includes(this.to_currency))
                 //     || (this.to_currency == 6 && [3,4,5].includes(this.from_currency))) return 'Not Available'
                 if(this.bestPool === null) return 'Not available'
                 return ['compound', 'y', 'busd', 'susd', 'pax', 'ren', 'sbtc', '1split'][this.bestPool]
             },
             selldisabled() {
-                if([7,8,9].includes(this.from_currency) && ![7,8,9].includes(this.to_currency) 
+                if([7,8,9].includes(this.from_currency) && ![7,8,9].includes(this.to_currency)
                     || [7,8,9].includes(this.to_currency) && ![7,8,9].includes(this.from_currency)) return true
                 // if(this.from_currency == 5 && ![0,1,2].includes(this.to_currency) || this.to_currency == 5 && ![0,1,2].includes(this.from_currency))
                 //     return true
@@ -446,10 +446,10 @@
                 let multipaths = ['DAI', 'USDC', 'USDT']
 
                 for(let j = this.decodeDistribution.length-1; j >= 0; j--) {
-                    if(this.multipath > 0 && j == 1) 
+                    if(this.multipath > 0 && j == 1)
                         text += Object.values(this.currencies)[this.from_currency] + ' -> ' + (multipaths[this.multipath-1]) + '<br>'
 
-                    if(this.multipath > 0 && j == 0) 
+                    if(this.multipath > 0 && j == 0)
                         text += (multipaths[this.multipath-1]) + ' -> ' + Object.values(this.currencies)[this.to_currency] + '<br>'
 
                     for(let [i, v] of this.decodeDistribution[j].entries()) {
@@ -606,7 +606,7 @@
                 return contractAbis[contractName].coin_precisions[i]
             },
             async highlight_input() {
-                var balance = parseFloat(await this.getCoins(this.from_currency).methods.balanceOf(contract.default_account || '0x0000000000000000000000000000000000000000').call()) 
+                var balance = parseFloat(await this.getCoins(this.from_currency).methods.balanceOf(contract.default_account || '0x0000000000000000000000000000000000000000').call())
                                 / this.precisions(this.from_currency);
                 if (this.fromInput > balance)
                     this.fromBgColor = 'red'
@@ -654,10 +654,10 @@
                     pool = Object.keys(contract.contracts).filter(pool=>pool != 'usdt' && pool != 'tbtc')[this.bestPool]
                     bestContract = contract.contracts[pool]
                 }
-                let address = bestContract.swap._address
+                let address = bestContract.swap.address
                 if(this.bestPool == 7) {
                     address = this.onesplit_address
-                    bestContract.swap._address = address
+                    bestContract.swap.address = address
                 }
                 this.waitingMessage = `Please approve ${this.fromInput} ${this.getCurrency(this.from_currency)} for exchange`
                 var { dismiss } = notifyNotification(this.waitingMessage)
@@ -671,15 +671,15 @@
                 catch(err) {
                     this.handleError(err)
                 }
-                this.waitingMessage = `Please confirm swap 
+                this.waitingMessage = `Please confirm swap
                                         from ${this.fromInput} ${this.getCurrency(this.from_currency)}
                                         for min ${this.toFixed(min_dy / this.precisions(j))} ${this.getCurrency(this.to_currency)}`
                 var { dismiss } = notifyNotification(this.waitingMessage)
                 if(this.bestPool == 7) {
                     try {
                         await this.onesplit.methods.swap(
-                            this.getCoins(this.from_currency)._address,
-                            this.getCoins(this.to_currency)._address,
+                            this.getCoins(this.from_currency).address,
+                            this.getCoins(this.to_currency).address,
                             amount,
                             min_dy,
                             this.distribution,
@@ -692,7 +692,7 @@
                         .once('transactionHash', hash => {
                             dismiss()
                             notifyHandler(hash)
-                            this.waitingMessage = `Waiting for swap 
+                            this.waitingMessage = `Waiting for swap
                                                     <a href='https://etherscan.io/tx/${hash}'>transaction</a>
                                                     to confirm: no further action needed`
                         })
@@ -705,7 +705,7 @@
                 }
                 else {
                     let exchangeMethod = bestContract.swap.methods.exchange_underlying
-                    if(this.swapwrapped || ['susd', 'ren', 'sbtc'].includes(this.bestPoolText)) 
+                    if(this.swapwrapped || ['susd', 'ren', 'sbtc'].includes(this.bestPoolText))
                         exchangeMethod = bestContract.swap.methods.exchange
                     i = this.normalizeCurrency(i)
                     j = this.normalizeCurrency(j)
@@ -717,7 +717,7 @@
                         })
                         .once('transactionHash', hash => {
                             notifyHandler(hash)
-                            this.waitingMessage = `Waiting for swap 
+                            this.waitingMessage = `Waiting for swap
                                                     <a href='https://etherscan.io/tx/${hash}'>transaction</a>
                                                     to confirm: no further action needed`
                         })
@@ -737,16 +737,16 @@
                 }
             },
             async set_from_amount(i) {
-                let coinAddress = this.getCoins(i)._address
+                let coinAddress = this.getCoins(i).address
                 let balanceCalls = [
                     [coinAddress, this.getCoins(i).methods.balanceOf(contract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()]]
                 if([5, 9].includes(i)) {
-                    balanceCalls.push([coinAddress, 
+                    balanceCalls.push([coinAddress,
                         this.getCoins(i).methods.transferableSynths(contract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
                     let currencyKey = '0x7355534400000000000000000000000000000000000000000000000000000000'
-                    if(i == 9) 
+                    if(i == 9)
                         currencyKey = '0x7342544300000000000000000000000000000000000000000000000000000000'
-                    balanceCalls.push([this.snxExchanger._address, 
+                    balanceCalls.push([this.snxExchanger.address,
                         this.snxExchanger.methods
                             .maxSecsLeftInWaitingPeriod(contract.default_account, currencyKey)
                             .encodeABI()
@@ -763,8 +763,8 @@
                     this.susdWaitingPeriodTime = +amounts[2]
                     highlight_red = this.fromInput > this.maxSynthBalance / this.precisions(this.from_currency)
                     if(this.susdWaitingPeriod) highlight_red = true
-                }   
-                if(highlight_red) 
+                }
+                if(highlight_red)
                     this.fromBgColor = 'red'
                 else
                     this.fromBgColor = 'blue'
@@ -782,10 +782,10 @@
                 if(this.swapwrapped == 1) flags -= 0x10
                 if(this.swapwrapped == 2) flags -= 0x800
                 return [
-                    this.onesplit._address,
+                    this.onesplit.address,
                     this.onesplit.methods.getExpectedReturn(
-                        this.getCoins(this.from_currency)._address,
-                        this.getCoins(this.to_currency)._address,
+                        this.getCoins(this.from_currency).address,
+                        this.getCoins(this.to_currency).address,
                         amount,
                         parts,
                         flags
@@ -824,7 +824,7 @@
                 let split_swap = await this.swapPromise
                 let decoded = split_swap[1].map(hex => contract.web3.eth.abi.decodeParameters(['uint256', 'uint256[]'], hex))
                 let max = decoded.reduce((a, b) => a[0] > b[0] ? a : b)
-                let decodedCall = contract.web3.eth.abi.decodeParameters(['address', 'address', 'uint256', 'uint256', 'uint256'], 
+                let decodedCall = contract.web3.eth.abi.decodeParameters(['address', 'address', 'uint256', 'uint256', 'uint256'],
                                                                 calls[decoded.indexOf(max)][1].slice(10))
                 this.usedFlags = decodedCall[4]
                 this.usedParts = decodedCall[3]
@@ -849,27 +849,27 @@
             getPoolsCalls() {
                 let pools = this.pools
                 let calls = []
-                if(this.swapwrapped == 1) { 
+                if(this.swapwrapped == 1) {
                     pools = ['compound', 'usdt']
                     let dx = BN(this.fromInput).times(contractAbis.usdt.wrapped_precisions[this.from_currency])
                     calls = [
                         [
-                            this.swap[0]._address,
+                            this.swap[0].address,
                             this.swap[0].methods.get_dy(this.from_currency, this.to_currency, dx.toFixed(0,1)).encodeABI()
                         ],
                         [
-                            this.swap[1]._address,
+                            this.swap[1].address,
                             this.swap[1].methods.get_dy(this.from_currency, this.to_currency, dx.toFixed(0,1)).encodeABI()
                         ]
                     ]
                 }
-                if(!this.swapwrapped) {          
+                if(!this.swapwrapped) {
                     let dx = BN(this.fromInput).times(contractAbis.iearn.coin_precisions[this.from_currency])
                     //TUSD only in y pool
                     if((this.from_currency == 3 || this.to_currency == 3) && this.pools.includes('y')) {
                         calls = [
                             [
-                                this.swap[2]._address,
+                                this.swap[2].address,
                                 this.swap[2].methods.get_dy_underlying(this.from_currency, this.to_currency, dx.toFixed(0,1)).encodeABI()
                             ]
                         ]
@@ -884,7 +884,7 @@
 
                         calls = [
                             [
-                                this.swap[3]._address,
+                                this.swap[3].address,
                                 this.swap[3].methods.get_dy_underlying(from_currency, to_currency, dx.toFixed(0,1)).encodeABI()
                             ]
                         ]
@@ -898,7 +898,7 @@
 
                         calls = [
                             [
-                                this.swap[4]._address,
+                                this.swap[4].address,
                                 this.swap[4].methods.get_dy(from_currency, to_currency, dx.toFixed(0,1)).encodeABI()
                             ]
                         ]
@@ -911,12 +911,12 @@
                         let dx = BN(this.fromInput).times(contractAbis.pax.coin_precisions[from_currency])
                         calls = [
                             [
-                                this.swap[5]._address,
+                                this.swap[5].address,
                                 this.swap[5].methods.get_dy_underlying(from_currency, to_currency, dx.toFixed(0,1)).encodeABI()
                             ]
                         ]
                     }
-                    else if(([7,8,9].includes(this.from_currency) || [7,8,9].includes(this.to_currency)) 
+                    else if(([7,8,9].includes(this.from_currency) || [7,8,9].includes(this.to_currency))
                             && (this.pools.includes('ren') || this.pools.includes('sbtc'))) {
                         let from_currency = this.from_currency - 7
                         let to_currency = this.to_currency - 7
@@ -926,7 +926,7 @@
                         if(this.from_currency == 9 || this.to_currency == 9) poolidx = [poolidx.filter(id => id != 7)]
                         calls = poolidx.map(i => {
                             return [
-                                this.swap[i]._address,
+                                this.swap[i].address,
                                 this.swap[i].methods.get_dy(from_currency, to_currency, dx.toFixed(0, 1)).encodeABI()
                             ]
                         }
@@ -940,7 +940,7 @@
                         if(this.from_currency == 2 || this.to_currency == 2) poolidx =  poolidx.filter(id => id != 0)
                         calls = poolidx.map(i =>
                             [
-                                this.swap[i]._address, 
+                                this.swap[i].address,
                                 this.swap[i].methods.get_dy_underlying(this.from_currency, this.to_currency, dx.toFixed(0,1)).encodeABI()
                             ]
                         )
@@ -1039,7 +1039,7 @@
                     }
                     let bestPool = this.bestPool
                     if(bestPool > 0) bestPool +=1
-                    let address = this.swap[bestPool]._address
+                    let address = this.swap[bestPool].address
                     if (BN(await this.getCoins(this.from_currency).methods.allowance(contract.default_account || '0x0000000000000000000000000000000000000000', address).call()).gt(contract.max_allowance.div(BN(2))))
                         this.inf_approval = true;
                     else

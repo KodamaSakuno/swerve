@@ -88,7 +88,7 @@ let wallets = [
   { walletName: "status" },
   { walletName: "fortmatic", apiKey: "pk_live_190B10CE18F47DCD" },
   { walletName: "authereum", apiKey: "_BTsipRcEmPeuVteLOGdoh1CXt733YLZ7u3ipbe_dAk" },
-  { 
+  {
     walletName: "trust",
     rpcUrl: "https://mainnet.infura.io/v3/c334bb4b45a444979057f0fb8a0c9d1b",
   },
@@ -96,7 +96,7 @@ let wallets = [
     walletName: "walletConnect",
     infuraKey: "c334bb4b45a444979057f0fb8a0c9d1b"
   },
-  { 
+  {
     walletName: "walletLink",
     appName: 'Curve Finance',
     appLogoUrl: 'https://www.curve.fi/logo.png',
@@ -210,20 +210,26 @@ async function init(init = true, name, walletlink = false) {
 	//try catch for checking cancel dialog
 	//const provider = await web3Modal.connect();
 
+  await new Promise(resolve => setTimeout(resolve, 1500));
+
 	/*const web3 = new Web3(provider);
 	window.web3 = web3;
   window.web3provider = web3;*/
   try {
     state.contract.initializedContracts = false;
-    let userSelectedWallet = await onboard.walletSelect(localStorage.getItem('selectedWallet') 
-      || window.web3 && window.web3.currentProvider.isTrust && 'Trust' 
-      || window.web3 && window.web3.currentProvider.isCoinbaseWallet && 'Coinbase');
-    if(userSelectedWallet) await onboard.walletCheck();
-    else window.web3 = new Web3(infura_url)
-    state.contract.web3 = window.web3
-    state.contract.multicall = new state.contract.web3.eth.Contract(multicall_abi, multicall_address)
+    // let userSelectedWallet = await onboard.walletSelect(localStorage.getItem('selectedWallet')
+    //   || window.web3 && window.web3.currentProvider.isTrust && 'Trust'
+    //   || window.web3 && window.web3.currentProvider.isCoinbaseWallet && 'Coinbase');
+    // if(userSelectedWallet) await onboard.walletCheck();
+    // else window.web3 = new Web3(infura_url)
+    //state.contract.web3 = window.web3
+    state.contract.tronWeb = window.tronWeb
+    state.contract.multicall = state.contract.tronWeb.contract(multicall_abi, multicall_address)
 
-    var default_account = (await state.contract.web3.eth.getAccounts())[0];
+    // if (!window.tronWeb.ready)
+    //   debugger
+
+    var default_account = tronWeb.defaultAddress.base58
     state.contract.default_account = default_account;
     if(init) await state.init(name);
     state.contract.initializedContracts = true;

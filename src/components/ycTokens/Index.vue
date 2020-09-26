@@ -7,8 +7,8 @@
 			are forked from iearn's yTokens, without owner and with Compound lending available for ycUSDT
 		</div>
 		<fieldset v-for='(token, i) of ycTokens' :key="i">
-			<legend> 
-				{{ token.name }} / {{ token.uname.toUpperCase() }} 
+			<legend>
+				{{ token.name }} / {{ token.uname.toUpperCase() }}
 				<span>APR: {{ (token.apr * 100).toFixed(2) }}%</span>
 			</legend>
 			<div class='tokens'>
@@ -17,16 +17,16 @@
 					<label :for="'token_'+i">
 						{{ token.name }}
 					</label>
-					<sub class='maxBalance'> Bal: 
+					<sub class='maxBalance'> Bal:
 						{{ (token.maxBalance / token.precisions).toFixed(2) }}
 						({{ ((token.maxBalance / token.precisions) * token.rate ).toFixed(2) }} {{ token.uname.toUpperCase() }})
 					</sub>
 				</div>
-				<input 
-					:id ="'token_'+i" 
-					type='text' 
-					v-model='token.value' 
-					@focus='changeValue(i)' 
+				<input
+					:id ="'token_'+i"
+					type='text'
+					v-model='token.value'
+					@focus='changeValue(i)'
 					@input='changeValue(i)'
 					:style = "{ backgroundColor: bgColors[i] }">
 				<button class='simplebutton' @click='withdraw(i)'>Withdraw</button>
@@ -37,15 +37,15 @@
 					<label :for="'token_'+i">
 						{{ token.uname.toUpperCase() }}
 					</label>
-					<sub class='maxBalance'> Bal: 
+					<sub class='maxBalance'> Bal:
 						{{ (token.maxBalanceUnderlying / token.precisions).toFixed(2) }}
 					</sub>
 				</div>
-				<input 
-					:id ="'token_'+i" 
-					type='text' 
-					v-model='token.uvalue' 
-					@focus='changeUValue(i)' 
+				<input
+					:id ="'token_'+i"
+					type='text'
+					v-model='token.uvalue'
+					@focus='changeUValue(i)'
 					@input='changeUValue(i)'
 					:style = "{ backgroundColor: ubgColors[i] }">
 				<button class='simplebutton' @click='deposit(i)'>Deposit</button>
@@ -66,7 +66,7 @@
 	export default {
 		data: () => ({
 			ycTokens: [
-				//{	
+				//{
 					//name
 					//uName
 					//maxBalance,
@@ -117,15 +117,15 @@
 					})
 					i++;
 				}
-				let calls = this.ycTokens.flatMap(t => 
+				let calls = this.ycTokens.flatMap(t =>
 					[
-						[t.ucontract._address, t.ucontract.methods.balanceOf(contract.default_account).encodeABI()],
-						[t.contract._address, t.contract.methods.balanceOf(contract.default_account).encodeABI()],
-						[iearnAPR_address, iearnAPR.methods.getAPROptions(t.ucontract._address).encodeABI()],
-						[t.contract._address, t.contract.methods.getPricePerFullShare().encodeABI()]
+						[t.ucontract.address, t.ucontract.methods.balanceOf(contract.default_account).encodeABI()],
+						[t.contract.address, t.contract.methods.balanceOf(contract.default_account).encodeABI()],
+						[iearnAPR_address, iearnAPR.methods.getAPROptions(t.ucontract.address).encodeABI()],
+						[t.contract.address, t.contract.methods.getPricePerFullShare().encodeABI()]
 					]
 				)
-				
+
 				let aggcalls = await contract.multicall.methods.aggregate(calls).call()
 				let balances = aggcalls[1].map((hex, i) => {
 					let paramArray = new Array(10).fill('uint256')
@@ -146,11 +146,11 @@
 				//n == 0 for token
 				//n == 1 for underlying token
 				if(n == 0) {
-					Vue.set(this.ycTokens, i, Object.assign({}, this.ycTokens[i], { value: 
+					Vue.set(this.ycTokens, i, Object.assign({}, this.ycTokens[i], { value:
 						(this.ycTokens[i].maxBalance / this.ycTokens[i].precisions).toFixed(2) }))
 				}
 				if(n == 1) {
-					Vue.set(this.ycTokens, i, Object.assign({}, this.ycTokens[i], { uvalue: 
+					Vue.set(this.ycTokens, i, Object.assign({}, this.ycTokens[i], { uvalue:
 						(this.ycTokens[i].maxBalanceUnderlying / this.ycTokens[i].precisions).toFixed(2) }))
 				}
 			},
@@ -168,7 +168,7 @@
 			},
 			async deposit(i) {
 				let amount = BN(this.ycTokens[i].uvalue).times(this.ycTokens[i].precisions)
-				await approveAmount(this.ycTokens[i].ucontract, amount, contract.default_account, this.ycTokens[i].contract._address)
+				await approveAmount(this.ycTokens[i].ucontract, amount, contract.default_account, this.ycTokens[i].contract.address)
 				await this.ycTokens[i].contract.methods.deposit(amount.toFixed(0,1)).send({
 					from: contract.default_account,
 					gas: 300000,

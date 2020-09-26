@@ -8,7 +8,7 @@
 						<input type='text' :style = "{backgroundColor: bgColor}" v-model='amount' id='payamount'>
 					</div>
 					<select class='tvision' v-model = 'token' >
-						<option v-for = '(v, i) in tokenNames' :value='v'>{{v}} 
+						<option v-for = '(v, i) in tokenNames' :value='v'>{{v}}
 							{{balances[i] && (['renCrv', 'sbtcCrv'].includes(v) ? '₿' : '$') + toFixed(balances[i] * virtual_prices[i] / 1e36, v)}}
 						</option>
 					</select>
@@ -18,8 +18,8 @@
 
 				<div class='flex-break'></div>
 				<div>
-					Amount in {{token}}: 
-					<span :class="{'loading line': crvAmount == null}"> 
+					Amount in {{token}}:
+					<span :class="{'loading line': crvAmount == null}">
 						<span v-show='crvAmount != null'> {{crvAmount}} </span>
 					</span>
 				</div>
@@ -125,7 +125,7 @@
 				this.contracts = this.abis.map(pool => new contract.web3.eth.Contract(ERC20_abi, allabis[pool].token_address))
 				this.swaps = this.abis.map(pool => new contract.web3.eth.Contract(allabis[pool].swap_abi, allabis[pool].swap_address))
 				this.rewards = [
-					new contract.web3.eth.Contract(allabis.susdv2.sCurveRewards_abi, allabis.susdv2.sCurveRewards_address), 
+					new contract.web3.eth.Contract(allabis.susdv2.sCurveRewards_abi, allabis.susdv2.sCurveRewards_address),
 					new contract.web3.eth.Contract(allabis.sbtc.sCurveRewards_abi, allabis.sbtc.sCurveRewards_address),
 				]
 				this.updateBalances();
@@ -186,7 +186,7 @@
 						[allabis[pool].swap_address, this.swaps[i].methods.get_virtual_price().encodeABI()]
 					]
 				})
-				calls.push(...this.rewards.map(reward => [reward._address, reward.methods.balanceOf(contract.default_account).encodeABI()]))
+				calls.push(...this.rewards.map(reward => [reward.address, reward.methods.balanceOf(contract.default_account).encodeABI()]))
 				let aggcalls = await contract.multicall.methods.aggregate(calls).call()
 				let decoded = aggcalls[1].map(hex => contract.web3.eth.abi.decodeParameter('uint256', hex))
 				this.balances = decoded.slice(0, -2).filter((_, i) => i % 2 == 0)

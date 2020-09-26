@@ -32,7 +32,7 @@
 		}),
 		computed: {
 			volume() {
-				return this.totalVolume !== undefined ? this.totalVolume : volumeStore.totalVolume() 
+				return this.totalVolume !== undefined ? this.totalVolume : volumeStore.totalVolume()
 			}
 		},
 		async created() {
@@ -58,15 +58,15 @@
 			    	console.log(key, "THE KEY")
 			        tokenContracts[key] = new web3.eth.Contract(ERC20_abi, contract.token_address);
 			        swapContracts[key] = new web3.eth.Contract(contract.swap_abi, contract.swap_address);
-			        calls.push([tokenContracts[key]._address, tokenContracts[key].methods.totalSupply().encodeABI()])
-			        calls.push([swapContracts[key]._address, swapContracts[key].methods.get_virtual_price().encodeABI()])
+			        calls.push([tokenContracts[key].address, tokenContracts[key].methods.totalSupply().encodeABI()])
+			        calls.push([swapContracts[key].address, swapContracts[key].methods.get_virtual_price().encodeABI()])
 			    }
 			    let susd_swap_token = new web3.eth.Contract(ERC20_abi, allabis.susd.token_address)
 			    let susd_swap = new web3.eth.Contract(allabis.susd.swap_abi, allabis.susd.swap_address)
 			    let ySUSD = new web3.eth.Contract(yERC20_abi, allabis.susd.coins[0])
 			    calls.push(
-			    	[ySUSD._address, ySUSD.methods.getPricePerFullShare().encodeABI()],
-			    	[susd_swap._address, susd_swap.methods.balances(0).encodeABI()]
+			    	[ySUSD.address, ySUSD.methods.getPricePerFullShare().encodeABI()],
+			    	[susd_swap.address, susd_swap.methods.balances(0).encodeABI()]
 			    )
 			    let aggcalls = await multicall.methods.aggregate(calls).call()
 			    let decoded = aggcalls[1].map(hex => web3.eth.abi.decodeParameter('uint256', hex))

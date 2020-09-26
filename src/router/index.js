@@ -252,7 +252,7 @@ let routes = [
     ]
   },
   {
-    path: '/:pool(y)/',
+    path: '/:pool(iearn)/',
     name: 'Index',
     component: PoolApp,
     children: [

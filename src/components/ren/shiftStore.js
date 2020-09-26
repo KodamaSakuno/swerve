@@ -176,7 +176,7 @@ export async function loadTransactions() {
 	await checkForFailed(transactions)
 	await checkForFailedStake(transactions.filter(t => t.stakeTxHash))
 	await resumeStakeTransactions(transactions)
-	//send all txs so case is handled when user goes to submit 
+	//send all txs so case is handled when user goes to submit
 	let mints = transactions.filter(t => [0,3].includes(t.type) && ![14,15].includes(t.state)).map(t=>sendMint(t))
 	console.log(mints, "MINTS")
 	let burns = transactions.filter(t => !t.btcTxHash && t.ethTxHash && t.state && t.state != 65 && t.type == 1)
@@ -223,7 +223,7 @@ export function refresh(transaction) {
 export async function useFirestore() {
 	if(state.fireUser !== null) return;
 	if(firestore == null) {
-		const importResolves = await Promise.all([import('firebase/app'), import('firebase/auth'), import('firebase/firestore')]) 
+		const importResolves = await Promise.all([import('firebase/app'), import('firebase/auth'), import('firebase/firestore')])
 		const Firebase = importResolves[0]
 
 		let firebaseConfig = {
@@ -258,9 +258,9 @@ export async function useFirestore() {
 		// 									type: 'string',
 		// 									name: 'Message',
 		// 									value: 'Sign in to store transaction data',
-		// 								}], 
+		// 								}],
 		// 								contract.default_account],
-		// 								from: contract.default_account}, 
+		// 								from: contract.default_account},
 		// 								(err, result) => {if(err) {reject(err)} else resolve(result)
 		// 							})
 		// 						})
@@ -364,7 +364,7 @@ export async function getItem(key) {
 	if(state.fireUser) {
 		let docRef = firestore.collection.doc(key)
 		let doc = await docRef.get()
-		if(doc.exists) { 
+		if(doc.exists) {
 			let encrypted = doc.data().data
 			return JSON.parse(await helpers.AES_GCM_decrypt(encrypted, state.aes_key))
 		}
@@ -482,7 +482,7 @@ function initSwapMint(transaction) {
 	var { id, amount, nonce, address, toInput, params, minExchangeRate, slippage, to_currency } = transaction
 	// let _minWbtcAmount = BN(toInput).times(1e8).times(0.99).toFixed(0, 1)
 	console.log(amount, "AMOUNT", nonce, "NONCE", address, "ADDRESS", minExchangeRate, "MIN EXCHANGE RATE", slippage, "SLIPPAGE")
-	
+
 
 	let contractParams = [
         {
@@ -525,12 +525,12 @@ function initSwapMint(transaction) {
 
 	    // The name of the function we want to call
 	    contractFn: "mintThenSwap",
-	    
+
 	    nonce: params && params.nonce || RenJS.utils.randomNonce(),
 
 	    // Arguments expected for calling `deposit`
 	    contractParams: contractParams,
-	    
+
 	    // Web3 provider for submitting mint to Ethereum
 	    web3Provider: web3.currentProvider,
 	}
@@ -580,7 +580,7 @@ function initDepositMint(transaction) {
 
 	    // The name of the function we want to call
 	    contractFn: "mintThenDeposit",
-	    
+
 	    nonce: params && params.nonce || RenJS.utils.randomNonce(),
 
 	    // Arguments expected for calling `deposit`
@@ -606,7 +606,7 @@ function initDepositMint(transaction) {
             	value: contract.default_account,
             },
 	    ],
-	    
+
 	    // Web3 provider for submitting mint to Ethereum
 	    web3Provider: web3.currentProvider,
 	}
@@ -824,10 +824,10 @@ export async function mintThenSwap({ id, amount, params, utxoAmount, renResponse
 			signature,
 	]
 
-	let adapterContract = adapters.filter(adapter => adapter._address.toLowerCase() == params.contractCalls[0].sendTo.toLowerCase())
+	let adapterContract = adapters.filter(adapter => adapter.address.toLowerCase() == params.contractCalls[0].sendTo.toLowerCase())
 
 	console.log(params.contractCalls[0].sendTo, "SEND TO")
-	if([oldrenAdapter._address.toLowerCase(), renAdapter._address.toLowerCase(), renAdapterBiconomy._address.toLowerCase()]
+	if([oldrenAdapter.address.toLowerCase(), renAdapter.address.toLowerCase(), renAdapterBiconomy.address.toLowerCase()]
 		.includes(params.contractCalls[0].sendTo.toLowerCase())) {
 		args = [
 			params.contractCalls[0].contractParams[0].value,
@@ -1006,7 +1006,7 @@ export async function mintThenDeposit({ id, amounts, min_amount, params, utxoAmo
 		transaction.new_min_amount = 0
 	}
 
-	let adapterContract = adapters.filter(adapter => adapter._address.toLowerCase() == params.contractCalls[0].sendTo.toLowerCase())
+	let adapterContract = adapters.filter(adapter => adapter.address.toLowerCase() == params.contractCalls[0].sendTo.toLowerCase())
 
 	console.log(params.contractCalls[0].contractParams[0].value,
 			utxoAmount,
@@ -1151,7 +1151,7 @@ export async function mintThenDeposit({ id, amounts, min_amount, params, utxoAmo
 	}
 
 	common.update_fee_info()
- 
+
 	// subscriptionStore.removeTxNotification(transaction.btcTxHash)
 
 	// transaction.state = 12
@@ -1222,12 +1222,12 @@ export async function burnSwap(data) {
 	let precisions = 1e8
 	if(data.from_currency == 2) precisions = 1e18
 
-	await common.approveAmount(contract.coins[data.from_currency], 
-		BN(data.fromInput).times(precisions), 
-		state.default_account, contract.adapterContract._address, data.inf_approval)
+	await common.approveAmount(contract.coins[data.from_currency],
+		BN(data.fromInput).times(precisions),
+		state.default_account, contract.adapterContract.address, data.inf_approval)
     await helpers.setTimeoutPromise(100)
 
-    console.log(contract.adapterContract._address, "THE ADDRESS")
+    console.log(contract.adapterContract.address, "THE ADDRESS")
 
 
 	let args = [
@@ -1252,7 +1252,7 @@ export async function burnSwap(data) {
 }
 
 export async function removeLiquidityThenBurn(data) {
-	await common.ensure_allowance_zap_out(data.amount, undefined, contract.adapterContract._address)
+	await common.ensure_allowance_zap_out(data.amount, undefined, contract.adapterContract.address)
 
     await helpers.setTimeoutPromise(100)
 
@@ -1278,7 +1278,7 @@ export async function removeLiquidityThenBurn(data) {
 
 
 export async function removeLiquidityImbalanceThenBurn(data) {
-	await common.ensure_allowance_zap_out(data.max_burn_amount, undefined, contract.adapterContract._address)
+	await common.ensure_allowance_zap_out(data.max_burn_amount, undefined, contract.adapterContract.address)
     await helpers.setTimeoutPromise(100)
 
 	let args = [
@@ -1304,7 +1304,7 @@ export async function removeLiquidityImbalanceThenBurn(data) {
 }
 
 export async function removeLiquidityOneCoinThenBurn(data) {
-	await common.ensure_allowance_zap_out(data.token_amounts, undefined, contract.adapterContract._address)
+	await common.ensure_allowance_zap_out(data.token_amounts, undefined, contract.adapterContract.address)
     await helpers.setTimeoutPromise(100)
 
 	let args = [

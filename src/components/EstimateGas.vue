@@ -1,5 +1,5 @@
 <template>
-	
+
 </template>
 
 <script>
@@ -37,8 +37,8 @@
 					.filter(pool => this.pools.includes(pool))
 					.map(pool => new web3.eth.Contract(allabis[pool].swap_abi, allabis[pool].swap_address))
 
-				this.gas = this.swapContracts.map(c => c._address).reduce((a, b) => ({...a, [b]: {}}), {})
-				let addresses = this.swapContracts.map(c => c._address.toLowerCase())
+				this.gas = this.swapContracts.map(c => c.address).reduce((a, b) => ({...a, [b]: {}}), {})
+				let addresses = this.swapContracts.map(c => c.address.toLowerCase())
 				let allevents = await this.getAllEvents();
 				let results = await Promise.all(allevents)
 				results = await Promise.all(results.flat(3))
@@ -70,8 +70,8 @@
 						if(['tbtc', 'ren'].includes(pool)) {
 							topics = [
 								this.swapContracts[this.pools.indexOf(pool)]
-									.getPastEvents(this.tokenExchangeEvent, 
-										{ 
+									.getPastEvents(this.tokenExchangeEvent,
+										{
 											fromBlock: fromBlock,
 											toBlock: toBlock,
 										}),
@@ -80,19 +80,19 @@
 						else {
 							topics = [
 								this.swapContracts[this.pools.indexOf(pool)]
-									.getPastEvents(this.tokenExchangeUnderlyingEvent, 
-										{ 
+									.getPastEvents(this.tokenExchangeUnderlyingEvent,
+										{
 											fromBlock: fromBlock,
 											toBlock: toBlock,
 										}),
 								this.swapContracts[this.pools.indexOf(pool)]
-									.getPastEvents(this.tokenExchangeEvent, 
-										{ 
+									.getPastEvents(this.tokenExchangeEvent,
+										{
 											fromBlock: fromBlock,
 											toBlock: toBlock,
 										}),
 							]
-						}		
+						}
 					return topics
 				})
 			},

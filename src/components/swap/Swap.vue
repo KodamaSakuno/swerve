@@ -98,10 +98,10 @@
                             </span>
                         </label>
                     </li>
-                    <li>
+                    <!-- <li>
                         <input id='swapw' type='checkbox' name='swapw' v-model = 'swapwrapped'>
                         <label for='swapw'>Swap wrapped</label>
-                    </li>
+                    </li> -->
                 </ul>
                 <div>
                     <button class='simplebutton advancedoptions' @click='showadvancedoptions = !showadvancedoptions'>
@@ -348,6 +348,7 @@
                 }
                 this.disabled = false;
                 this.from_cur_handler()
+                console.log(this.coins)
 
             },
             getTokenIcon(token) {
@@ -451,23 +452,23 @@
                     this.fromBgColor = '#2f3437'
             },
             async set_from_amount(i) {
-                let balanceCalls = [[this.coins[i]._address, this.coins[i].methods.balanceOf(this.default_account).encodeABI()]]
-                if(this.currentPool == 'susdv2' && i == 3 || this.currentPool == 'sbtc' && i == 2) {
-                    balanceCalls.push([this.coins[i]._address, this.coins[i].methods.transferableSynths(this.default_account).encodeABI()])
-                    let currencyKey = '0x7355534400000000000000000000000000000000000000000000000000000000'
-                    if(this.currentPool == 'sbtc')
-                        currencyKey = '0x7342544300000000000000000000000000000000000000000000000000000000'
-                    balanceCalls.push([
-                        currentContract.snxExchanger._address,
-                        currentContract.snxExchanger.methods
-                        .maxSecsLeftInWaitingPeriod(currentContract.default_account, currencyKey)
-                        .encodeABI()
-                    ])
-                }
-                let aggcalls = await currentContract.multicall.methods.aggregate(balanceCalls).call()
-                let balances = aggcalls[1].map(hex => web3.eth.abi.decodeParameter('uint256', hex))
-                let amounts = balances.map(balance => currentContract.default_account ? balance : 0)
-                this.maxBalance = amounts[0]
+                // let balanceCalls = [[this.coins[i].address, this.coins[i].methods.balanceOf(this.default_account).encodeABI()]]
+                // if(this.currentPool == 'susdv2' && i == 3 || this.currentPool == 'sbtc' && i == 2) {
+                //     balanceCalls.push([this.coins[i].address, this.coins[i].methods.transferableSynths(this.default_account).encodeABI()])
+                //     let currencyKey = '0x7355534400000000000000000000000000000000000000000000000000000000'
+                //     if(this.currentPool == 'sbtc')
+                //         currencyKey = '0x7342544300000000000000000000000000000000000000000000000000000000'
+                //     balanceCalls.push([
+                //         currentContract.snxExchanger.address,
+                //         currentContract.snxExchanger.methods
+                //         .maxSecsLeftInWaitingPeriod(currentContract.default_account, currencyKey)
+                //         .encodeABI()
+                //     ])
+                // }
+                // let aggcalls = await currentContract.multicall.methods.aggregate(balanceCalls).call()
+                // let balances = aggcalls[1].map(hex => web3.eth.abi.decodeParameter('uint256', hex))
+                // let amounts = balances.map(balance => currentContract.default_account ? balance : 0)
+                this.maxBalance = await currentContract.coins[i].methods.balanceOf(this.default_account).call()
                 let highlight_red = this.fromInput > this.maxBalance / this.precisions[this.from_currency]
                 if(highlight_red)
                     this.fromBgColor = '#2f3437'
@@ -480,19 +481,22 @@
                     var j = this.to_currency;
                     var dx_ = this.fromInput;
                     var dx = cBN(Math.round(dx_ * this.precisions[i])).toFixed(0,1);
-                    let calls = [
-                        [currentContract.swap._address, currentContract.swap.methods.balances(i).encodeABI()],
-                    ]
-                    if(!this.swapwrapped && !['susdv2', 'tbtc', 'ren'].includes(this.currentPool))
-                        calls.push([currentContract.swap._address, currentContract.swap.methods.get_dy_underlying(i, j, dx).encodeABI()])
-                    else {
-                        //dx = cBN(dx).times(currentContract.c_rates[i])
-                        calls.push([currentContract.swap._address, currentContract.swap.methods.get_dy(i, j, dx).encodeABI()])
-                    }
-                    calls.push([this.coins[this.to_currency]._address , this.coins[this.to_currency].methods.balanceOf(currentContract.default_account).encodeABI()])
-                    let aggcalls = await currentContract.multicall.methods.aggregate(calls).call(undefined, 'pending')
-                    let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
-                    let [b, get_dy_underlying, balance] = decoded
+                    // let calls = [
+                    //     [currentContract.swap.address, currentContract.swap.methods.balances(i).encodeABI()],
+                    // ]
+                    // if(!this.swapwrapped && !['susdv2', 'tbtc', 'ren'].includes(this.currentPool))
+                    //     calls.push([currentContract.swap.address, currentContract.swap.methods.get_dy_underlying(i, j, dx).encodeABI()])
+                    // else {
+                    //     //dx = cBN(dx).times(currentContract.c_rates[i])
+                    //     calls.push([currentContract.swap.address, currentContract.swap.methods.get_dy(i, j, dx).encodeABI()])
+                    // }
+                    // calls.push([this.coins[this.to_currency].address , this.coins[this.to_currency].methods.balanceOf(currentContract.default_account).encodeABI()])
+                    // let aggcalls = await currentContract.multicall.methods.aggregate(calls).call(undefined, 'pending')
+                    // let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
+                    // let [b, get_dy_underlying, balance] = decoded
+                    let b = await currentContract.swap.methods.balances(i).call();
+                    let get_dy_underlying = await currentContract.swap.methods.get_dy(i, j, dx).call();
+                    let balance = await currentContract.coins[this.to_currency].methods.balanceOf(currentContract.default_account).call();
                     b = +b * currentContract.c_rates[i];
                     // In c-units
                     var dy_ = +get_dy_underlying / this.precisions[j];
@@ -514,37 +518,39 @@
                 var i = this.from_currency
                 var j = this.to_currency;
 
+                await common.ensure_underlying_allowance(i, currentContract.max_allowance, [], undefined, this.swapwrapped)
                 var b = parseInt(await currentContract.swap.methods.balances(i).call()) / currentContract.c_rates[i];
+                debugger
                 let maxSlippage = this.maxSlippage / 100;
                 let currency = (Object.keys(this.currencies)[this.from_currency]).toUpperCase()
-                if(this.swapwrapped) currency = Object.values(this.currencies)[this.from_currency]
-                if(this.maxInputSlippage) maxSlippage = this.maxInputSlippage / 100;
+                // if(this.swapwrapped) currency = Object.values(this.currencies)[this.from_currency]
+                // if(this.maxInputSlippage) maxSlippage = this.maxInputSlippage / 100;
                 var dx = Math.floor(this.fromInput * this.precisions[i]);
-                if(BN(this.maxBalance).gt(0) && BN(this.maxBalance).div(this.precisions[i]).minus(BN(this.fromInput)).lt(BN(this.minAmount))) {
-                    dx = this.maxBalance
-                }
-                let min_dy_method = 'get_dy_underlying'
-                if(this.swapwrapped || ['susdv2', 'tbtc', 'ren', 'sbtc'].includes(this.currentPool)) {
-                    min_dy_method = 'get_dy'
-                }
+                // if(BN(this.maxBalance).gt(0) && BN(this.maxBalance).div(this.precisions[i]).minus(BN(this.fromInput)).lt(BN(this.minAmount))) {
+                //     dx = this.maxBalance
+                // }
+                // let min_dy_method = 'get_dy_underlying'
+                // if(this.swapwrapped || ['susdv2', 'tbtc', 'ren', 'sbtc'].includes(this.currentPool)) {
+                //     min_dy_method = 'get_dy'
+                // }
                 var min_dy = BN(await currentContract.swap.methods[min_dy_method](i, j, BN(dx).toFixed(0,1)).call())
                 min_dy = min_dy.times(1-maxSlippage)
-                dx = cBN(dx.toString()).toFixed(0,1);
-                this.waitingMessage = `Please approve ${this.fromInput} ${this.getCurrency(this.from_currency)} for exchange`
-                var { dismiss } = notifyNotification(this.waitingMessage)
-                try {
-                    if (this.inf_approval)
-                        await common.ensure_underlying_allowance(i, currentContract.max_allowance, [], undefined, this.swapwrapped)
-                    else
-                        await common.ensure_underlying_allowance(i, dx, [], undefined, this.swapwrapped);
-                }
-                catch(err) {
-                    console.error(err)
-                    dismiss()
-                    this.waitingMessage = '',
-                    this.show_loading = false
-                    throw err;
-                }
+                // dx = cBN(dx.toString()).toFixed(0,1);
+                // this.waitingMessage = `Please approve ${this.fromInput} ${this.getCurrency(this.from_currency)} for exchange`
+                // var { dismiss } = notifyNotification(this.waitingMessage)
+                // try {
+                //     if (this.inf_approval)
+                //         await common.ensure_underlying_allowance(i, currentContract.max_allowance, [], undefined, this.swapwrapped)
+                //     else
+                //         await common.ensure_underlying_allowance(i, dx, [], undefined, this.swapwrapped);
+                // }
+                // catch(err) {
+                //     console.error(err)
+                //     dismiss()
+                //     this.waitingMessage = '',
+                //     this.show_loading = false
+                //     throw err;
+                // }
                 dismiss()
                 this.waitingMessage = `Please confirm swap
                                         from ${this.fromInput} ${this.getCurrency(this.from_currency)}

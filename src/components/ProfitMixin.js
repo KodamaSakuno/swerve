@@ -100,8 +100,8 @@ export default {
 	    			let vault = '0x5dbcF33D8c2E976c6b560249878e6F1491Bca25c'
 	    			let vaultContract = new currentContract.web3.eth.Contract(yERC20_abi, '0x5dbcF33D8c2E976c6b560249878e6F1491Bca25c')
 	    			let calls = [
-	    				[vaultContract._address, vaultContract.methods.balanceOf(currentContract.default_account).encodeABI()],
-	    				[vaultContract._address, vaultContract.methods.getPricePerFullShare().encodeABI()],
+	    				[vaultContract.address, vaultContract.methods.balanceOf(currentContract.default_account).encodeABI()],
+	    				[vaultContract.address, vaultContract.methods.getPricePerFullShare().encodeABI()],
 	    			]
 	    			let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
 	    			let [balanceOf, rate] = aggcalls[1].map(hex => +currentContract.web3.eth.abi.decodeParameter('uint256', hex))
@@ -124,13 +124,13 @@ export default {
 	    		[this.CURVE_TOKEN, '0x70a08231000000000000000000000000' + this.account.slice(2)],
 	    	]
 	    	if(['susdv2', 'sbtc', 'y', 'iearn'].includes(currentContract.currentContract))
-	    		calls.push([currentContract.curveRewards._address, '0x70a08231000000000000000000000000' + this.account.slice(2)])
+	    		calls.push([currentContract.curveRewards.address, '0x70a08231000000000000000000000000' + this.account.slice(2)])
 	    	let aggcalls = await currentContract.multicall.methods.aggregate(calls).call();
 	    	let [tokenBalance, stakedBalance] = aggcalls[1].map(hex => +currentContract.web3.eth.abi.decodeParameter('uint256', hex))
 	    	let totalStake = 0
 		    if(['susdv2', 'sbtc'].includes(this.currentPool)) {
 		    	stakedBalance = await currentContract.web3.eth.call({
-			        to: currentContract.curveRewards._address,
+			        to: currentContract.curveRewards.address,
 			        data: '0x70a08231000000000000000000000000' + this.account.slice(2),
 			    });
 
@@ -164,7 +164,7 @@ export default {
 	            promises.push(this.getAvailable(curr))
 	        }
 	        let prices = await Promise.all(promises);
-	        
+
 	        return await this.calculateAvailable(prices);
 	    },
 
@@ -299,7 +299,7 @@ export default {
 			}
 			if(['tbtc', 'ren', 'sbtc'].includes(this.currentPool)) {
 				point.btcPrice = this.btcPrice
-				// //instead of this better to make a request to coinpaprika but which API allows querying 
+				// //instead of this better to make a request to coinpaprika but which API allows querying
 				// try {
 				// 	point.btcPrice = await this.getClosestBTCPrice(timestamp)
 				// }
@@ -340,7 +340,7 @@ export default {
 		        let exchangeRate;
 		        if(mintevent[1] == 0 || mintevent[2] == 0) return -1
 		        exchangeRate = BN(mintevent[1]).div(BN(mintevent[2]));
-		        if(address == currentContract.coins[1]._address) {
+		        if(address == currentContract.coins[1].address) {
 		            exchangeRate = BN(mintevent[1]).times(BN(1e12)).div(BN(mintevent[2]))
 		        }
 		        if(direction == 0) return exchangeRate
@@ -349,7 +349,7 @@ export default {
 		    return false;
 		},
 	    async getExchangeRate(blockNumber, address, value, type) {
-	    	if(currentContract.currentContract == 'pax' && address.toLowerCase() == currentContract.coins[3]._address.toLowerCase()) {
+	    	if(currentContract.currentContract == 'pax' && address.toLowerCase() == currentContract.coins[3].address.toLowerCase()) {
 	    		return 1
 	    	}
 		    let exchangeRate = await this.checkExchangeRateBlocks(blockNumber, address, 0);
@@ -395,7 +395,7 @@ export default {
 		        	exchangeRatePast.exchangeRate = exchangeRatePast.exchangeRate
 		        }
 	        	if(exchangeRatePast.exchangeRate === undefined || exchangeRateFuture.exchangeRate === undefined) return -1;
-	        	exchangeRate = interpolate(blockNumber, exchangeRatePast.blockNumber, exchangeRateFuture.blockNumber)( 
+	        	exchangeRate = interpolate(blockNumber, exchangeRatePast.blockNumber, exchangeRateFuture.blockNumber)(
 	        		exchangeRatePast.exchangeRate, exchangeRateFuture.exchangeRate)
 		        // exchangeRate = (blockNumber - exchangeRatePast.blockNumber)*(exchangeRateFuture.exchangeRate-(exchangeRatePast.exchangeRate))
 		        // exchangeRate = exchangeRate / ((exchangeRateFuture.blockNumber - exchangeRatePast.blockNumber))
@@ -413,8 +413,8 @@ export default {
 		            if(tokens == 0) continue;
 		            const tokenIndex = Object.values(this.ADDRESSES)[i]
 		            let curr = Object.keys(this.ADDRESSES)[i]
-		            let address = currentContract.coins[i]._address
-		          	if(['iearn','busd','pax'].includes(currentContract.currentContract)) address = currentContract.underlying_coins[i]._address
+		            let address = currentContract.coins[i].address
+		          	if(['iearn','busd','pax'].includes(currentContract.currentContract)) address = currentContract.underlying_coins[i].address
 		            let exchangeRate = await this.getExchangeRate(block, address, '', type)
 		        	if(exchangeRate == -1) continue;
 		            let usd;
@@ -427,7 +427,7 @@ export default {
 		          		usd = tokens * exchangeRate
 		          	}
 		          	else if(currentContract.currentContract == 'susdv2' || (currentContract.currentContract == 'pax' && i == 3)) {
-		            	usd = this.fromNativeCurrent(curr, BN(exchangeRate).times(BN(tokens)))	
+		            	usd = this.fromNativeCurrent(curr, BN(exchangeRate).times(BN(tokens)))
 		          	}
 		          	else {
 		            	usd = this.fromNative(curr, BN(exchangeRate).times(BN(tokens)))
@@ -447,8 +447,8 @@ export default {
 		    let allDepositsUSD = 0
 
 		    let fromBlock = this.fromBlock;
-		    if(localStorage.getItem(this.currentPool + 'dversion') == this.version 
-	    		&& localStorage.getItem(this.currentPool + 'lastDepositBlock') 
+		    if(localStorage.getItem(this.currentPool + 'dversion') == this.version
+	    		&& localStorage.getItem(this.currentPool + 'lastDepositBlock')
 	    		&& localStorage.getItem(this.currentPool + 'dlastAddress') == default_account
 	    		&& currentContract.default_account) {
 		        let block = +localStorage.getItem(this.currentPool + 'lastDepositBlock')
@@ -489,7 +489,7 @@ export default {
 		        console.log(addliquidity)
 	            let poolInfoPoint = await this.interpolatePoint(timestamp)
 	            let transfer = receipt.logs
-	            					.filter(log=>log.address == this.CURVE_TOKEN 
+	            					.filter(log=>log.address == this.CURVE_TOKEN
 	            						&& log.topics[0] == this.TRANSFER_TOPIC
 	            						&& log.topics[1] != '0x000000000000000000000000' + default_account
 	            						&& log.topics[2] == '0x000000000000000000000000' + default_account)
@@ -544,7 +544,7 @@ export default {
 		    this.withdrawalsBTC = 0;
 		    let allWithdrawalsUSD = 0
 		    let fromBlock = this.fromBlock;
-		    if(localStorage.getItem(this.currentPool + 'wversion') == this.version 
+		    if(localStorage.getItem(this.currentPool + 'wversion') == this.version
 		    	&& localStorage.getItem(this.currentPool + 'lastWithdrawalBlock')
 			 	&& localStorage.getItem(this.currentPool + 'wlastAddress') == default_account
 			 	&& currentContract.default_account) {
@@ -585,7 +585,7 @@ export default {
 		        let removeliquidityOne = []
 		        if(this.removeliquidityOneTopic) removeliquidityOne = receipt.logs.filter(log=>log.topics[0] == this.removeliquidityOneTopic)
 	            let transfer = receipt.logs
-	        					.filter(log=>log.topics[0] == this.TRANSFER_TOPIC 
+	        					.filter(log=>log.topics[0] == this.TRANSFER_TOPIC
     								&& log.topics[1] == '0x000000000000000000000000' + default_account
     								&& log.topics[2] != '0x000000000000000000000000' + default_account
     								&& log.address.toLowerCase() == currentContract.token_address.toLowerCase())
@@ -594,11 +594,11 @@ export default {
 	            console.log(transferTokens / 1e18, poolInfoPoint.virtual_price, transferTokens * poolInfoPoint.virtual_price / 1e36)
 	            console.log(transfer)
 	            console.log("WITHDRAWALS")
-            	if(removeliquidity.length == 0 && 
-            		removeliquidityImbalance.length == 0 && 
-            		removeliquidityOne.length == 0 && 
+            	if(removeliquidity.length == 0 &&
+            		removeliquidityImbalance.length == 0 &&
+            		removeliquidityOne.length == 0 &&
             		[
-            			"0x000000000000000000000000dcb6a51ea3ca5d3fd898fd6564757c7aaec3ca92", 
+            			"0x000000000000000000000000dcb6a51ea3ca5d3fd898fd6564757c7aaec3ca92",
             			"0x00000000000000000000000013c1542a468319688b89e323fe9a3be3a90ebb27",
             			"0x0000000000000000000000000001fb050fe7312791bf6475b96569d83f695c9f",
             			"0x0000000000000000000000005dbcf33d8c2e976c6b560249878e6f1491bca25c",

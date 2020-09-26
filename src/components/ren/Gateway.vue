@@ -1,6 +1,6 @@
 <template>
 	<div class='rengateway'>
-		
+
 		<div class='exchange'>
 
             <div class='exchangefields'>
@@ -10,13 +10,13 @@
                 <fieldset class='item'>
                     <legend>From:</legend>
                     <div class='maxbalance' @click='set_max_balance'>
-                    	Max: 
-                    	<span 
+                    	Max:
+                    	<span
                             v-show="currentPool == 'sbtc' && from_currency == 2"
                         >
                             {{maxSynthText}}/
                         </span>
-                    	<span>{{maxBalanceText}}</span> 
+                    	<span>{{maxBalanceText}}</span>
                     	<span v-show='susdWaitingPeriod' class='susd-waiting-period'>
                             <span class='tooltip'>
                                 <img src='@/assets/clock-regular.svg' class='icon small'>
@@ -44,13 +44,13 @@
                         <li class='coins' v-for='(currency, i) in Object.keys(currencies)' :key="i">
                             <input type="radio" :id="'from_cur_'+i" name="from_cur" :value='i' v-model='from_currency'>
                             <label :for="'from_cur_'+i">
-                            	<img 
-                                    :class="{'token-icon': true, [currency+'-icon']: true}" 
+                            	<img
+                                    :class="{'token-icon': true, [currency+'-icon']: true}"
                                     :src='getTokenIcon(currency)'>
                                 <span>{{currency | capitalize}}</span>
                             </label>
                         </li>
-                        <div v-show='from_currency == 0 && amountAfterBTC >= 0' class='amount-after-fees'> 
+                        <div v-show='from_currency == 0 && amountAfterBTC >= 0' class='amount-after-fees'>
                         	Amount after renVM fees: {{amountAfterBTC}}
                         </div>
                     </ul>
@@ -63,9 +63,9 @@
                     <div class='maxbalance2'>Max: <span></span> </div>
                     <ul>
                         <li>
-                            <input type="text" 
-                            id="to_currency" 
-                            name="to_currency" 
+                            <input type="text"
+                            id="to_currency"
+                            name="to_currency"
                             disabled
                             :style = "{backgroundColor: bgColor}"
                             :value = 'toInputFormat'>
@@ -79,8 +79,8 @@
                         <li class='coins' v-for='(currency, i) in Object.keys(currencies)' :key="i">
                             <input type="radio" :id="'to_cur_'+i" name="to_cur" :value='i' v-model='to_currency'>
                             <label :for="'to_cur_'+i">
-                            	<img 
-                                    :class="{'token-icon': true, [currency+'-icon']: true}" 
+                            	<img
+                                    :class="{'token-icon': true, [currency+'-icon']: true}"
                                     :src='getTokenIcon(currency)'>
                                 <span>{{currency | capitalize}}</span>
                             </label>
@@ -91,15 +91,15 @@
                     </ul>
                 </fieldset>
             </div>
-            <p class='exchange-rate' v-show='!([1,2].includes(this.from_currency) && [1,2].includes(this.to_currency))'>Exchange rate (including fees and renVM fee): 
+            <p class='exchange-rate' v-show='!([1,2].includes(this.from_currency) && [1,2].includes(this.to_currency))'>Exchange rate (including fees and renVM fee):
             	<span id="exchange-rate" v-show='!lessThanMinOrder'>{{ exchangeRate && exchangeRate.toFixed(4) }}</span>
             	<span v-show='lessThanMinOrder'>N/A</span>
             </p>
-            <p class='exchange-rate'>Exchange rate (including fees): 
+            <p class='exchange-rate'>Exchange rate (including fees):
             	<span id="exchange-rate" v-show='!lessThanMinOrder'>{{ exchangeRateOriginal && exchangeRateOriginal.toFixed(4) }}</span>
             	<span v-show='lessThanMinOrder'>N/A</span>
             </p>
-            <div id='max_slippage'><span>Max slippage:</span> 
+            <div id='max_slippage'><span>Max slippage:</span>
                 <input id="slippage05" type="radio" name="slippage" value='0.005' @click='maxSlippage = 0.5; customSlippageDisabled = true'>
                 <label for="slippage05">0.5%</label>
 
@@ -113,7 +113,7 @@
             </div>
             <gas-price></gas-price>
             <p class='simple-error' v-show='lessThanMinOrder && from_currency == 0'>
-            	Minimum mint order size is {{ (minOrderSize / 1e8).toFixed(8) }} 
+            	Minimum mint order size is {{ (minOrderSize / 1e8).toFixed(8) }}
             </p>
             <p class='simple-error' v-show='lessThanMinOrder && from_currency == 1'>
             	Minimum burn order size is {{ (minOrderSize / 1e8 + 0.00000547).toFixed(8) }}
@@ -121,7 +121,7 @@
             <div class='input address' v-show='this.from_currency == 0 && [1,2].includes(this.to_currency) || [1,2].includes(this.from_currency) && this.to_currency == 0'>
 				<label for='address' v-show='[1,2].includes(this.from_currency) && this.to_currency == 0'>BTC withdrawal address</label>
 				<label for='address' v-show='this.from_currency == 0 && [1,2].includes(this.to_currency)'>ETH address</label>
-				
+
 				<input id='address' type='text' v-model='address' placeholder='Address' :style='addressStyle'>
 			</div>
 	     	<ul class='infiniteapproval'>
@@ -147,7 +147,7 @@
         </div>
 
         <approve-chi></approve-chi>
-        
+
         <p class='simple-error' v-show='address && !checkAddress'>
             Invalid {{ from_currency == 0 ? 'ETH' : 'BTC' }} address
         </p>
@@ -155,8 +155,8 @@
 
 		<tx-table></tx-table>
 
-		
-	</div>	
+
+	</div>
 </template>
 
 <script>
@@ -183,7 +183,7 @@
     import ApproveCHI from './ApproveCHI.vue'
 
     import validate from 'bitcoin-address-validation';
-	
+
 	const txObject = () => ({
 		id: '',
 		timestamp: null,
@@ -222,7 +222,7 @@
 			address: '',
 
 			confirmations: 6,
-			// 1 - getting btc deposit address, 2 - waiting to confirm on btc network, 3 - 
+			// 1 - getting btc deposit address, 2 - waiting to confirm on btc network, 3 -
 			box: null,
 			showModal: false,
 			qrValue: null,
@@ -253,7 +253,7 @@
 		}),
 		computed: {
 			swapDisabled() {
-				return this.lessThanMinOrder || 
+				return this.lessThanMinOrder ||
 					([1,2].includes(this.from_currency) && this.to_currency == 0 && !this.address) ||
                     !this.checkAddress
 			},
@@ -283,13 +283,13 @@
             lessThanMinOrder() {
             	if([1,2].includes(this.from_currency) && [1,2].includes(this.to_currency)) return false
                 if(this.from_currency == 0 && this.amountAfterBTC < 0) return true
-                if(this.from_currency == 1 && (this.fromInput * 1e8 * (1-state.burnFee/10000)) < state.minersReleaseFee + 500) return true 
+                if(this.from_currency == 1 && (this.fromInput * 1e8 * (1-state.burnFee/10000)) < state.minersReleaseFee + 500) return true
             },
         	toInputFormat() {
         		if(!this.toInput || typeof this.toInput == 'string') return '0.00'
         		if([1,2].includes(this.from_currency) && [1,2].includes(this.to_currency))
         			return +this.toInputOriginal.toFixed(8)
-        		return +this.toInput.toFixed(8) 
+        		return +this.toInput.toFixed(8)
         	},
         	addressStyle() {
         		if(this.from_currency == 0) {
@@ -320,7 +320,7 @@
             		return {
             			btc: 'BTC',
 						wbtc: 'wBTC',
-						sbtc: 'sBTC',	
+						sbtc: 'sBTC',
             		}
             	}
             },
@@ -355,7 +355,7 @@
                 }
 
                 if(this.from_currency == 0) this.fromBgColor = 'blue'
-                
+
                 this.from_cur_handler()
             },
             async to_currency(val, oldval) {
@@ -446,7 +446,7 @@
 					get_dys.push(contract.swap.methods.get_dy(i, j, BN(this.amountAfterBTC).times(this.fromPrecisions).toFixed(0,1)).encodeABI())
 				}
 				this.promise.cancel()
-				let calls = get_dys.map(call => [contract.swap._address, call])
+				let calls = get_dys.map(call => [contract.swap.address, call])
 				let promise = contract.multicall.methods.aggregate(calls).call()
 				this.promise = helpers.makeCancelable(promise)
 				try {
@@ -501,13 +501,13 @@
             async setMaxBalance() {
             	if(this.from_currency == 0) return;
             	let calls = [
-            		[contract.coins[this.from_currency]._address, contract.coins[this.from_currency].methods.balanceOf(contract.default_account).encodeABI()],
+            		[contract.coins[this.from_currency].address, contract.coins[this.from_currency].methods.balanceOf(contract.default_account).encodeABI()],
             	]
 
             	if(this.currentPool == 'sbtc' && this.from_currency == 2) {
             		calls.push(
-	            			[contract.coins[this.from_currency]._address, contract.coins[this.from_currency].methods.transferableSynths(contract.default_account).encodeABI()],
-		            		[contract.snxExchanger._address, contract.snxExchanger.methods
+	            			[contract.coins[this.from_currency].address, contract.coins[this.from_currency].methods.transferableSynths(contract.default_account).encodeABI()],
+		            		[contract.snxExchanger.address, contract.snxExchanger.methods
 		                        .maxSecsLeftInWaitingPeriod(contract.default_account, "0x7342544300000000000000000000000000000000000000000000000000000000").encodeABI()],
                     )
             	}
@@ -555,7 +555,7 @@
                     }
 				}
 
-				else if([1,2].includes(this.from_currency) && this.to_currency == 0) { 
+				else if([1,2].includes(this.from_currency) && this.to_currency == 0) {
 					store.burnSwap({
 						address: this.address,
 						fromInput: this.fromInput,

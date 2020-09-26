@@ -112,7 +112,7 @@ export async function retry(fn, retryDelay = 100, numRetries = 3) {
   for (let i = 0; i < numRetries; i++) {
     try {
       return await fn
-    } 
+    }
     catch (e) {
       if (i === numRetries - 1) throw e
       await setTimeoutPromise(retryDelay)
@@ -145,10 +145,10 @@ export function urlBase64ToUint8Array(base64String) {
   var base64 = (base64String + padding)
     .replace(/\-/g, '+')
     .replace(/_/g, '/');
- 
+
   var rawData = window.atob(base64);
   var outputArray = new Uint8Array(rawData.length);
- 
+
   for (var i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);
   }
@@ -158,7 +158,7 @@ export function urlBase64ToUint8Array(base64String) {
 export function copyToClipboard(text) {
     if (window.clipboardData && window.clipboardData.setData) {
         // IE specific code path to prevent textarea being shown while dialog is visible.
-        return clipboardData.setData("Text", text); 
+        return clipboardData.setData("Text", text);
 
     } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
         var textarea = document.createElement("textarea");
@@ -368,7 +368,12 @@ export function isElementInViewport (el) {
     );
 }
 
+export function encodeAbi(method) {
+  const { signature, inputs } = method
+  console.log(window.tronWeb.utils.abi.encodeParams(inputs, ['TTQ2VTeJq6ifcG2nDNw1bWc89UBKt3uKtT']))
 
+  debugger
+}
 
 
 Vue.filter('formatNumber', formatNumber)

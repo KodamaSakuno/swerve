@@ -221,9 +221,9 @@
 		        	let multicall = new web3.eth.Contract(multicall_abi, multicall_address)
 
 		        	let calls = [
-						[curveRewards._address, curveRewards.methods.DURATION().encodeABI()],
-						[curveRewards._address, curveRewards.methods.rewardRate().encodeABI()],
-						[curveRewards._address, curveRewards.methods.periodFinish().encodeABI()],
+						[curveRewards.address, curveRewards.methods.DURATION().encodeABI()],
+						[curveRewards.address, curveRewards.methods.rewardRate().encodeABI()],
+						[curveRewards.address, curveRewards.methods.periodFinish().encodeABI()],
 					]
 
 					let aggcalls = await multicall.methods.aggregate(calls).call()
@@ -274,9 +274,9 @@
 		        	let multicall = new web3.eth.Contract(multicall_abi, multicall_address)
 
 		        	let calls = [
-						[curveRewards._address, curveRewards.methods.DURATION().encodeABI()],
-						[curveRewards._address, curveRewards.methods.rewardRate().encodeABI()],
-						[curveRewards._address, curveRewards.methods.periodFinish().encodeABI()],
+						[curveRewards.address, curveRewards.methods.DURATION().encodeABI()],
+						[curveRewards.address, curveRewards.methods.rewardRate().encodeABI()],
+						[curveRewards.address, curveRewards.methods.periodFinish().encodeABI()],
 					]
 
 					let aggcalls = await multicall.methods.aggregate(calls).call()

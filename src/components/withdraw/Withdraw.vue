@@ -8,9 +8,9 @@
             </legend>
             <ul>
                 <li>
-                    <input type="text" 
-                    id="liquidity-share" 
-                    name="liquidity-share" 
+                    <input type="text"
+                    id="liquidity-share"
+                    name="liquidity-share"
                     v-model='share'
                     @input='handle_change_share'
                     @focus='handle_change_share'
@@ -23,8 +23,8 @@
             <ul>
                 <li v-for='(currency, i) in Object.keys(currencies)'>
                     <label :for="'currency_'+i" class='currency_label'>
-                        <img 
-                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}" 
+                        <img
+                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}"
                             :src='getTokenIcon(currency)'>
                         <span v-show='withdrawc'>{{currencies[currency]}}
 	                    	<span v-show="!(currency == 'usdt' && currentPool == 'usdt') && !['susdv2', 'ren', 'sbtc'].includes(currentPool)">(in {{currency | capitalize}})</span>
@@ -32,9 +32,9 @@
                     	<span v-show="!withdrawc && !['susdv2', 'tbtc', 'ren', 'sbtc'].includes(currentPool)">{{currency | capitalize}}</span>
                         <span v-show="!withdrawc && ['susdv2', 'tbtc', 'ren', 'sbtc'].includes(currentPool)">{{currencies[currency]}}</span>
                     </label>
-                    <input type="text" 
-                    :id="'currency_'+i" 
-                    name="from_cur" 
+                    <input type="text"
+                    :id="'currency_'+i"
+                    name="from_cur"
                     v-model = 'inputs[i]'
                     :style = "inputStyles[i]"
                     :disabled = "currentPool == 'susd'"
@@ -64,8 +64,8 @@
                         Combination of all coins
                         <span v-for='(currency, i) in Object.keys(currencies)'>
                             <span v-show='i > 0'>+</span>
-                            <img 
-                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}" 
+                            <img
+                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}"
                             :src='getTokenIcon(currency)'>
                         </span>
                     </label>
@@ -73,17 +73,17 @@
 				<li v-for='(currency, i) in Object.keys(currencies)' class='withdrawin'>
 	                <input type="radio" :id="'to_cur_'+i" name="to_cur" :value='i' :checked='to_currency === i' @click='handleCheck(i)'>
 	                <label :for="'to_cur_'+i">
-                        <img 
-                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}" 
-                            :src='getTokenIcon(currency)'> 
+                        <img
+                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}"
+                            :src='getTokenIcon(currency)'>
                             <span v-show='!withdrawc'> {{ currency | capitalize }} </span>
                             <span v-show='withdrawc'> {{ currencies[currency] }} </span>
                     </label>
 	            </li>
 	            <li>
 	            	<input type='checkbox' id='donate_dust' name='donate_dust' v-model='donate_dust'>
-	            	<label 
-                        for='donate_dust' 
+	            	<label
+                        for='donate_dust'
                         v-show="!['tbtc', 'ren', 'sbtc'].includes(currentPool)">Donate dust
                             <span class='tooltip'>[?]<span class='tooltiptext'>(may use less gas)</span>
                         </span>
@@ -139,7 +139,7 @@
                 @click='handle_remove_liquidity()' v-show="currentPool != 'susd'">
                 Withdraw <span class='loading line' v-show='loadingAction == 1'></span>
             </button>
-            <button 
+            <button
                 id='remove-liquidity-unstake'
                 v-show = "['susdv2', 'sbtc','y','iearn'].includes(currentPool) && staked_balance > 0 "
                 :disabled = 'slippage < -0.03'
@@ -159,13 +159,13 @@
             >
                 Claim {{(pendingBALRewards / 1e18).toFixed(6)}} BPT
             </button>
-            <button id='claim-snxbpt' 
+            <button id='claim-snxbpt'
                 @click='claim_SNX(true, false)'
                 v-show="['sbtc'].includes(currentPool) && withdrawBALPool > 0"
             >
                 Withdraw {{(withdrawSNXPool / 1e18).toFixed(0)}} SNX + {{(withdrawRENPool / 1e18).toFixed(0)}} REN
             </button>
-            <!-- <button id='claim-adai' 
+            <!-- <button id='claim-adai'
                 @click='showModal = true'
                 v-show="['y', 'iearn'].includes(currentPool) && withdrawADAI > 0"
             >
@@ -220,9 +220,9 @@
                         <div>
                             <label for='unstakepercentage'>Unstake:</label>
                             <input id='unstakepercentage' v-model='unstakepercentage' :class="{'invalid': unstakePercentageInvalid}">
-                            <button id='unstakestaked' 
+                            <button id='unstakestaked'
                                 v-show="staked_balance > 0 && ['susdv2', 'sbtc', 'y', 'iearn'].includes(currentPool)"
-                                :disabled='unstakePercentageInvalid' 
+                                :disabled='unstakePercentageInvalid'
                                 @click='unstakeStaked()'
                             >
                                 Unstake staked
@@ -300,7 +300,7 @@
             ethPrice: 0,
             unstakepercentage: 0,
             get showadvancedoptions() {
-                return localStorage.getItem('advancedoptions') === 'true' 
+                return localStorage.getItem('advancedoptions') === 'true'
             },
             set showadvancedoptions(val) {
                 localStorage.setItem('advancedoptions', val)
@@ -406,7 +406,7 @@
             	currentContract.showSlippage = false;
         		currentContract.slippage = 0;
                 let curveRewards = currentContract.curveRewards
-                let allowance = BN(await currentContract.swap_token.methods.allowance(currentContract.default_account || '0x0000000000000000000000000000000000000000', currentContract.deposit_zap._address).call())
+                let allowance = BN(await currentContract.swap_token.methods.allowance(currentContract.default_account || '0x0000000000000000000000000000000000000000', currentContract.deposit_zap.address).call())
                 if(allowance.lte(currentContract.max_allowance.div(BN(2))))
                     this.inf_approval = false
                 if(['susdv2', 'y', 'iearn'].includes(this.currentPool)) {
@@ -417,11 +417,11 @@
                     this.balancerPool = new currentContract.web3.eth.Contract(balancer_ABI, balancer_address)
                     window.balancerPool = this.balancerPool
                     let calls = [
-                        [curveRewards._address, curveRewards.methods.earned(this.default_account).encodeABI()],
-                        [this.balancerPool._address, this.balancerPool.methods.totalSupply().encodeABI()],
-                        [this.balancerPool._address, this.balancerPool.methods.getBalance('0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f').encodeABI()],
-                        [this.balancerPool._address, this.balancerPool.methods.getBalance('0x408e41876cccdc0f92210600ef50372656052a38').encodeABI()],
-                        [this.balancerPool._address, this.balancerPool.methods.balanceOf(currentContract.default_account).encodeABI()],
+                        [curveRewards.address, curveRewards.methods.earned(this.default_account).encodeABI()],
+                        [this.balancerPool.address, this.balancerPool.methods.totalSupply().encodeABI()],
+                        [this.balancerPool.address, this.balancerPool.methods.getBalance('0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f').encodeABI()],
+                        [this.balancerPool.address, this.balancerPool.methods.getBalance('0x408e41876cccdc0f92210600ef50372656052a38').encodeABI()],
+                        [this.balancerPool.address, this.balancerPool.methods.balanceOf(currentContract.default_account).encodeABI()],
                     ]
                     let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
                     let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
@@ -505,18 +505,18 @@
             	let calls = []
 			    if (currentContract.default_account) {
 			        for (let i = 0; i < currentContract.N_COINS; i++) {
-			        	calls.push([currentContract.underlying_coins[i]._address ,currentContract.underlying_coins[i].methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+			        	calls.push([currentContract.underlying_coins[i].address ,currentContract.underlying_coins[i].methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
 			        }
-			        calls.push([currentContract.swap_token._address ,currentContract.swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+			        calls.push([currentContract.swap_token.address ,currentContract.swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
 			    }
 			    else {
 			        this.token_balance = BN(0);
 			    }
 			    for (let i = 0; i < currentContract.N_COINS; i++) {
-			    	calls.push([currentContract.swap._address ,currentContract.swap.methods.balances(i).encodeABI()])
+			    	calls.push([currentContract.swap.address ,currentContract.swap.methods.balances(i).encodeABI()])
 			    }
-		    	if(['susdv2', 'sbtc','y','iearn'].includes(this.currentPool)) calls.push([currentContract.curveRewards._address, currentContract.curveRewards.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
-				calls.push([currentContract.swap_token._address ,currentContract.swap_token.methods.totalSupply().encodeABI()])
+		    	if(['susdv2', 'sbtc','y','iearn'].includes(this.currentPool)) calls.push([currentContract.curveRewards.address, currentContract.curveRewards.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+				calls.push([currentContract.swap_token.address ,currentContract.swap_token.methods.totalSupply().encodeABI()])
 				let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
 				let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
 				if(currentContract.default_account) {
@@ -524,7 +524,7 @@
 						Vue.set(this.wallet_balances, i, +v / allabis[this.currentPool].coin_precisions[i])
 					})
 					this.token_balance = BN(decoded[currentContract.N_COINS])
-					decoded = decoded.slice(currentContract.N_COINS+1)			
+					decoded = decoded.slice(currentContract.N_COINS+1)
 				}
 				decoded.slice(0, currentContract.N_COINS+1 + currentContract.N_COINS).map((v, i) => {
 					Vue.set(this.balances, i, +v)
@@ -549,9 +549,9 @@
 		        values = values.map(v=>BN(Math.floor(v).toString()).toFixed(0))
 		        this.show_nobalance = false;
 		        this.show_nobalance_i = 0;
-		        let calls = [...Array(currentContract.N_COINS).keys()].map(i=>[currentContract.swap._address, currentContract.swap.methods.balances(i).encodeABI()])
-		        calls.push([currentContract.swap._address ,currentContract.swap.methods.calc_token_amount(values, false).encodeABI()])
-		        calls.push([currentContract.swap_token._address, currentContract.swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+		        let calls = [...Array(currentContract.N_COINS).keys()].map(i=>[currentContract.swap.address, currentContract.swap.methods.balances(i).encodeABI()])
+		        calls.push([currentContract.swap.address ,currentContract.swap.methods.calc_token_amount(values, false).encodeABI()])
+		        calls.push([currentContract.swap_token.address, currentContract.swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
 		        try {
                     let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
                     let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
@@ -609,11 +609,11 @@
 			},
             async claim_SNX(claim_bpt_only = false, unstake = true) {
                 this.show_loading = true
-                this.waitingMessage = `Please confirm claiming ${(this.pendingSNXRewards / 1e18).toFixed(2)} 
+                this.waitingMessage = `Please confirm claiming ${(this.pendingSNXRewards / 1e18).toFixed(2)}
                     ${['y', 'iearn'].includes(this.currentPool) ? 'YFI' : 'SNX'}`
                 if(this.currentPool == 'sbtc')
                     this.waitingMessage += ` and ${(this.pendingRENRewards / 1e18).toFixed(2)} REN`
-                
+
                 var { dismiss } = notifyNotification(this.waitingMessage)
                 let promises = await Promise.all([helpers.getETHPrice()])
                 this.ethPrice = promises[0]
@@ -680,7 +680,7 @@
 
             //         let balance = BN(await currentContract.aRewards.methods.claimable(currentContract.default_account).call())
             //         let yFI = new currentContract.web3.eth.Contract(ERC20_abi, '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e')
-            //         await common.approveAmount(yFI, balance, currentContract.default_account, currentContract.aRewards._address)
+            //         await common.approveAmount(yFI, balance, currentContract.default_account, currentContract.aRewards.address)
             //         dismiss()
 
             //         var { dismiss1 } = notifyNotification('Please confirm burning YFI to aDAI transaction')
@@ -715,15 +715,15 @@
                     this.waitingMessage = `
                         Please confirm unstaking ${this.toFixed(amount.div(BN(1e18)))} tokens
                     `
-                else 
+                else
                     this.waitingMessage = `
                     Unstaking ${this.toFixed(amount.div(BN(1e18)))} tokens for withdrawal.
                     <br>
                     A bit more tokens are needed to unstake to ensure that withdrawal is successful.
                     You'll see them in your unstaked balance afterwards.
-                        
+
                 `;
-                
+
                 var { dismiss } = notifyNotification(this.waitingMessage)
 
                 let stakedAmount = BN(await currentContract.curveRewards.methods.balanceOf(currentContract.default_account).call())
@@ -838,7 +838,7 @@
 			        token_amount = BN(Math.floor(token_amount * this.getMaxSlippage).toString()).toFixed(0,1)
                     if((this.token_balance.lt(BN(token_amount)) || unstake) && ['susdv2', 'sbtc','y','iearn'].includes(this.currentPool)) {
                         let unstakeAmount = BN(token_amount).minus(BN(this.token_balance))
-                        if(unstake) unstakeAmount = BN(token_amount) 
+                        if(unstake) unstakeAmount = BN(token_amount)
                         await this.unstake(unstakeAmount, unstake && !unstake_only, unstake_only)
                     }
                     if(unstake_only) return;
@@ -862,7 +862,7 @@
                             }
                             await helpers.setTimeoutPromise(100)
     			        	await currentContract.swap.methods.remove_liquidity_imbalance(this.amounts, token_amount).send({
-    				        	from: currentContract.default_account, 
+    				        	from: currentContract.default_account,
                                 gasPrice: this.gasPriceWei,
                                 gas: gas,
     				        }).once('transactionHash', hash => {
@@ -900,7 +900,7 @@
                             var { dismiss } = notifyNotification(this.waitingMessage)
                             await helpers.setTimeoutPromise(100)
     			        	await inOneCoin.methods.remove_liquidity_imbalance(amounts, token_amount).send({
-    				        	from: currentContract.default_account, 
+    				        	from: currentContract.default_account,
                                 gasPrice: this.gasPriceWei,
                                 gas: gas,
     				        }).once('transactionHash', hash => {
@@ -963,7 +963,7 @@
 			        		}).once('transactionHash', hash => {
                                 dismiss()
                                 notifyHandler(hash)
-                                this.waitingMessage = `Waiting for withdrawal 
+                                this.waitingMessage = `Waiting for withdrawal
                                 <a href='https://etherscan.io/tx/${hash}'>transaction</a>
                                 to confirm: no further action needed`
                             })
@@ -987,14 +987,14 @@
                             await helpers.setTimeoutPromise(100)
     			        	await inOneCoin.methods.remove_liquidity(amount, min_amounts)
     			        	.send({
-                                from: currentContract.default_account, 
+                                from: currentContract.default_account,
                                 gasPrice: this.gasPriceWei,
                                 gas: contractGas.depositzap[this.currentPool].withdrawShare,
                             })
                             .once('transactionHash', hash => {
                                 dismiss()
                                 notifyHandler(hash)
-                                this.waitingMessage = `Waiting for withdrawal 
+                                this.waitingMessage = `Waiting for withdrawal
                                 <a href='https://etherscan.io/tx/${hash}'>transaction</a>
                                 to confirm: no further action needed`
                             });
@@ -1026,14 +1026,14 @@
                             }
                             await helpers.setTimeoutPromise(100)
     			        	await currentContract.swap.methods.remove_liquidity(amount, min_amounts).send({
-                                from: currentContract.default_account, 
+                                from: currentContract.default_account,
                                 gasPrice: this.gasPriceWei,
                                 gas: 600000,
                             })
                             .once('transactionHash', hash => {
                                 dismiss()
                                 notifyHandler(hash)
-                                this.waitingMessage = `Waiting for withdrawal 
+                                this.waitingMessage = `Waiting for withdrawal
                                 <a href='https://etherscan.io/tx/${hash}'>transaction</a>
                                 to confirm: no further action needed`
                             });

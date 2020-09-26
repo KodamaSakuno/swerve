@@ -188,13 +188,13 @@
 			         	else {
 			         		if(key == 'iearn' || key == 'y' || key == 'busd' || (key == 'susd' && i == 0) || (key == 'pax' && i < 3)) {
 			            		calls.push([
-			            			this.all_coins[key].coins[i]._address,
+			            			this.all_coins[key].coins[i].address,
 			            			this.all_coins[key].coins[i].methods.getPricePerFullShare().encodeABI()
 			            		])
 			         		}
 			         		else if(key == 'susd' && i == 1) {
 			         			calls.push([
-			         				this.all_coins[key].coins[i]._address,
+			         				this.all_coins[key].coins[i].address,
 			         				this.all_coins[key].coins[i].methods.get_virtual_price().encodeABI()
 			         			])
 			         		}
@@ -202,15 +202,15 @@
 						        if(key != 'usdt') {
 							        calls.push(
 							        	[
-							        		this.all_coins[key].coins[i]._address,
+							        		this.all_coins[key].coins[i].address,
 							        		this.all_coins[key].coins[i].methods.exchangeRateStored().encodeABI()
 							        	],
 							        	[
-							        		this.all_coins[key].coins[i]._address,
+							        		this.all_coins[key].coins[i].address,
 							        		this.all_coins[key].coins[i].methods.supplyRatePerBlock().encodeABI()
 							        	],
 							        	[
-							        		this.all_coins[key].coins[i]._address,
+							        		this.all_coins[key].coins[i].address,
 							        		this.all_coins[key].coins[i].methods.accrualBlockNumber().encodeABI()
 							        	],
 							        )
@@ -218,41 +218,41 @@
 			         		}
 					    }
 					    calls.push([
-					    	this.web3contracts[key].swap._address,
+					    	this.web3contracts[key].swap.address,
 					    	this.web3contracts[key].swap.methods.balances(i).encodeABI(),
 					    ])
 				    }
 				    calls.push(
 				    	[
-				    		this.web3contracts[key].swap._address,
+				    		this.web3contracts[key].swap.address,
 				    		this.web3contracts[key].swap.methods.get_virtual_price().encodeABI(),
 				    	],
 				    	[
-				    		this.web3contracts[key].swap._address,
+				    		this.web3contracts[key].swap.address,
 				    		this.web3contracts[key].swap.methods.A().encodeABI(),
 				    	],
 				    	[
-				    		this.web3contracts[key].swap._address,
+				    		this.web3contracts[key].swap.address,
 				    		this.web3contracts[key].swap.methods.future_A().encodeABI(),
 				    	],
 				    	[
-				    		this.web3contracts[key].swap._address,
+				    		this.web3contracts[key].swap.address,
 				    		this.web3contracts[key].swap.methods.admin_actions_deadline().encodeABI(),
 				    	],
 				    	[
-				    		this.web3contracts[key].swap._address,
+				    		this.web3contracts[key].swap.address,
 				    		this.web3contracts[key].swap.methods.fee().encodeABI(),
 				    	],
 				    	[
-				    		this.web3contracts[key].swap._address,
+				    		this.web3contracts[key].swap.address,
 				    		this.web3contracts[key].swap.methods.admin_fee().encodeABI(),
 				    	],
 				    	[
-				    		this.web3contracts[key].swap_token._address,
+				    		this.web3contracts[key].swap_token.address,
 				    		this.web3contracts[key].swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI(),
 				    	],
 				    	[
-				    		this.web3contracts[key].swap_token._address,
+				    		this.web3contracts[key].swap_token.address,
 				    		this.web3contracts[key].swap_token.methods.totalSupply().encodeABI(),
 				    	],
 				    )

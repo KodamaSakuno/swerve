@@ -3,7 +3,7 @@ import * as BN from 'bignumber.js'
 import allabis, { ERC20_abi, cERC20_abi, yERC20_abi, synthERC20_abi, synthetixExchanger_address, synthetixExchanger_ABI,
 	multicall_abi, multicall_address, CHI_address } from './allabis'
 import web3Init from './init'
-import { chunkArr } from './utils/helpers'
+import { chunkArr, encodeAbi } from './utils/helpers'
 import * as common from './utils/common.js'
 
 var N_COINS = 2;
@@ -272,6 +272,7 @@ let initState = () => ({
 
 const state = Vue.observable({
 	web3: null,
+	tronWeb: null,
 	multicall: null,
 	walletName: null,
 	allInitContracts: new Set(),
@@ -445,73 +446,74 @@ export async function init(contract, refresh = false) {
 	if(state.initializedContracts && contract.currentContract == state.currentContract && !refresh) return Promise.resolve();
 	if(contract && (contract.currentContract == state.currentContract || state.contracts[contract.currentContract].initializedContracts) && !refresh) return Promise.resolve();
 	if(!contract) contract = state
-	try {
-        let networkId = await state.web3.eth.net.getId();
-        if(networkId != 1) {
-            this.error = 'Error: wrong network type. Please switch to mainnet';
-        }
-    }
-    catch(err) {
-        console.error(err);
-        this.error = 'There was an error connecting. Please refresh page';
-    }
+	// try {
+    //     let networkId = await state.tronWeb
+    //     if(networkId != 1) {
+    //         this.error = 'Error: wrong network type. Please switch to mainnet';
+    //     }
+    // }
+    // catch(err) {
+    //     console.error(err);
+    //     this.error = 'There was an error connecting. Please refresh page';
+    // }
 
-	if(['ren', 'sbtc'].includes(contract.currentContract))
-		state.chi = state.chi || window.tronWeb.contract(ERC20_abi, CHI_address)
+	// if(['ren', 'sbtc'].includes(contract.currentContract))
+	// 	state.chi = state.chi || window.tronWeb.contract(ERC20_abi, CHI_address)
 
-    let calls  = [
-    	//get_virtual_price
-    	[allabis[contract.currentContract].swap_address, '0xbb7b8b80'],
-    	//A
-    	[allabis[contract.currentContract].swap_address, '0xf446c1d0'],
-    	//future_A
-        [allabis[contract.currentContract].swap_address, '0xb4b577ad'],
-        //admin_actions_deadline
-        [allabis[contract.currentContract].swap_address, '0x405e28f8'],
-    ];
+	let calls = []
+    // let calls  = [
+    // 	//get_virtual_price
+    // 	[allabis[contract.currentContract].swap_address, '0xbb7b8b80'],
+    // 	//A
+    // 	[allabis[contract.currentContract].swap_address, '0xf446c1d0'],
+    // 	//future_A
+    //     [allabis[contract.currentContract].swap_address, '0xb4b577ad'],
+    //     //admin_actions_deadline
+    //     [allabis[contract.currentContract].swap_address, '0x405e28f8'],
+    // ];
 
-    if(contract.currentContract == 'compound') {
-	    state.old_swap = new state.web3.eth.Contract(allabis.compound.old_swap_abi, old_swap_address);
-	    state.old_swap_token = new state.web3.eth.Contract(ERC20_abi, old_token_address);
-    	calls.push([state.old_swap_token._address, state.old_swap_token.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
-    }
-    if(['ren', 'sbtc'].includes(contract.currentContract)) {
-    	state.adapterContract = new state.web3.eth.Contract(allabis[contract.currentContract].adapterABI, allabis[contract.currentContract].adapterBiconomyAddress)
-    }
-    if(contract.currentContract == 'susdv2') {
-    	//balanceOf(address)
-    	let default_account = state.default_account || '0x0000000000000000000000000000000000000000'
-    	calls.push([allabis.susd.token_address, '0x70a08231000000000000000000000000'+default_account.slice(2)])
+    // if(contract.currentContract == 'compound') {
+	//     state.old_swap = state.tronWeb.contract(allabis.compound.old_swap_abi, old_swap_address);
+	//     state.old_swap_token = state.tronWeb.contract(ERC20_abi, old_token_address);
+    // 	calls.push([state.old_swap_token.address, state.old_swap_token.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+    // }
+    // if(['ren', 'sbtc'].includes(contract.currentContract)) {
+    // 	state.adapterContract = state.tronWeb.contract(allabis[contract.currentContract].adapterABI, allabis[contract.currentContract].adapterBiconomyAddress)
+    // }
+    // if(contract.currentContract == 'susdv2') {
+    // 	//balanceOf(address)
+    // 	let default_account = state.default_account || '0x0000000000000000000000000000000000000000'
+    // 	calls.push([allabis.susd.token_address, '0x70a08231000000000000000000000000'+default_account.slice(2)])
 
-		contract.curveRewards = new state.web3.eth.Contract(allabis.susdv2.sCurveRewards_abi, allabis.susdv2.sCurveRewards_address)
-		calls.push([contract.curveRewards._address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+	// 	contract.curveRewards = state.tronWeb.contract(allabis.susdv2.sCurveRewards_abi, allabis.susdv2.sCurveRewards_address)
+	// 	calls.push([contract.curveRewards.address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
 
-    	contract.snxExchanger = new state.web3.eth.Contract(synthetixExchanger_ABI, synthetixExchanger_address)
-    }
-    if(contract.currentContract == 'sbtc') {
+    // 	contract.snxExchanger = state.tronWeb.contract(synthetixExchanger_ABI, synthetixExchanger_address)
+    // }
+    // if(contract.currentContract == 'sbtc') {
 
-    	contract.curveRewards = new state.web3.eth.Contract(allabis.sbtc.sCurveRewards_abi, allabis.sbtc.sCurveRewards_address)
-		calls.push([contract.curveRewards._address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+    // 	contract.curveRewards = state.tronWeb.contract(allabis.sbtc.sCurveRewards_abi, allabis.sbtc.sCurveRewards_address)
+	// 	calls.push([contract.curveRewards.address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
 
-    	contract.snxExchanger = new state.web3.eth.Contract(synthetixExchanger_ABI, synthetixExchanger_address)
-    }
-    if(['iearn','y'].includes(contract.currentContract)) {
-    	// contract.aRewards = new state.web3.eth.Contract(allabis.iearn.aRewards_abi, allabis.iearn.aRewards_address)
-    	// contract.curveRewards = new state.web3.eth.Contract(allabis.iearn.sCurveRewards_abi, allabis.iearn.sCurveRewards_address)
-		// calls.push([contract.curveRewards._address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
-    }
-    if(['tbtc', 'ren', 'sbtc'].includes(contract.currentContract)) {
-    	//initial_A
-    	calls.push([allabis[contract.currentContract].swap_address, '0x5409491a'])
-    	//initial_A_time
-    	calls.push([allabis[contract.currentContract].swap_address, '0x2081066c'])
-    	//future_A_time
-    	calls.push([allabis[contract.currentContract].swap_address, '0x14052288'])
-    }
+    // 	contract.snxExchanger = state.tronWeb.contract(synthetixExchanger_ABI, synthetixExchanger_address)
+    // }
+    // if(['iearn','y'].includes(contract.currentContract)) {
+    	// contract.aRewards = state.tronWeb.contract(allabis.iearn.aRewards_abi, allabis.iearn.aRewards_address)
+    	// contract.curveRewards = state.tronWeb.contract(allabis.iearn.sCurveRewards_abi, allabis.iearn.sCurveRewards_address)
+		// calls.push([contract.curveRewards.address, contract.curveRewards.methods.balanceOf(state.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+    // }
+    // if(['tbtc', 'ren', 'sbtc'].includes(contract.currentContract)) {
+    // 	//initial_A
+    // 	calls.push([allabis[contract.currentContract].swap_address, '0x5409491a'])
+    // 	//initial_A_time
+    // 	calls.push([allabis[contract.currentContract].swap_address, '0x2081066c'])
+    // 	//future_A_time
+    // 	calls.push([allabis[contract.currentContract].swap_address, '0x14052288'])
+    // }
     if(!['susd', 'tbtc', 'ren', 'sbtc'].includes(contract.currentContract))
-    	state.deposit_zap = new state.web3.eth.Contract(allabis[state.currentContract].deposit_abi, allabis[state.currentContract].deposit_address)
-    contract.swap = new state.web3.eth.Contract(allabis[contract.currentContract].swap_abi, allabis[contract.currentContract].swap_address);
-    contract.swap_token = new state.web3.eth.Contract(ERC20_abi, allabis[contract.currentContract].token_address);
+    	state.deposit_zap = state.tronWeb.contract(allabis[state.currentContract].deposit_abi, allabis[state.currentContract].deposit_address)
+    contract.swap = state.tronWeb.contract(allabis[contract.currentContract].swap_abi, allabis[contract.currentContract].swap_address);
+    contract.swap_token = state.tronWeb.contract(ERC20_abi, allabis[contract.currentContract].token_address);
     window[contract.currentContract] = {};
     window[contract.currentContract].swap = contract.swap
     window[contract.currentContract].swap_token = contract.swap_token
@@ -520,19 +522,19 @@ export async function init(contract, refresh = false) {
     window[contract.currentContract].aRewards = contract.aRewards
     contract.coins = []
     contract.underlying_coins = []
-    if(window.location.href.includes('withdraw_old'))
-      calls.push(...(await common.update_fee_info('old', contract, false)))
-  	else
-      calls.push(...(await common.update_fee_info('new', contract, false)));
-    for (let i = 0; i < allabis[contract.currentContract].N_COINS; i++) {
-	  	let coinsCall = contract.swap.methods.coins(i).encodeABI()
-	  	let underlyingCoinsCall = ['tbtc', 'ren', 'sbtc'].includes(contract.currentContract) ?
-	  								contract.swap.methods.coins(i).encodeABI()
-	  								: contract.swap.methods.underlying_coins(i).encodeABI();
-    	calls.push([contract.swap._address, coinsCall])
-    	calls.push([contract.swap._address, underlyingCoinsCall])
-    }
-    // await common.multiInitState(calls, contract, true)
+    // if(window.location.href.includes('withdraw_old'))
+    //   calls.push(...(await common.update_fee_info('old', contract, false)))
+  	// else
+    //   calls.push(...(await common.update_fee_info('new', contract, false)));
+    // for (let i = 0; i < allabis[contract.currentContract].N_COINS; i++) {
+	//   	let coinsCall = contract.swap.methods.coins(i).encodeABI()
+	//   	let underlyingCoinsCall = ['tbtc', 'ren', 'sbtc'].includes(contract.currentContract) ?
+	//   								contract.swap.methods.coins(i).encodeABI()
+	//   								: contract.swap.methods.underlying_coins(i).encodeABI();
+    // 	calls.push([contract.swap.address, coinsCall])
+    // 	calls.push([contract.swap.address, underlyingCoinsCall])
+    // }
+    await common.multiInitState(calls, contract, true)
   	contract.initializedContracts = true;
   	console.timeEnd('init')
   	state.allInitContracts = new Set(state.allInitContracts.add(contract.currentContract))
@@ -547,12 +549,12 @@ export const allState = Vue.observable({
 export async function getAllUnderlying() {
 	for([key, contract] of Object.entries(allabis)) {
 		if(key == 'susd') continue;
-		allState.swap[key] = new state.web3.eth.Contract(contract.swap_abi, contract.swap_address);
+		allState.swap[key] = state.tronWeb.contract(contract.swap_abi, contract.swap_address);
         allState.underlying_coins[key] = [];
 		for(let i = 0; i < contract.N_COINS; i++) {
 			var addr = await allState.swap[key].methods.coins(i).call();
 	        var underlying_addr = await allState.swap[key].swap.methods.underlying_coins(i).call();
-	        allState.underlying_coins[key][i] = new state.web3.eth.Contract(ERC20_abi, underlying_addr);
+	        allState.underlying_coins[key][i] = state.tronWeb.contract(ERC20_abi, underlying_addr);
 		}
 	}
 }

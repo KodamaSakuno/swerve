@@ -8,7 +8,7 @@
       <div class='poolsdropdown'>
         <button class='simplebutton' :class="{'loading line': !initializedContracts && !['Stats', 'FAQ', 'Donate'].includes($route.name)}">[{{poolMenu[currentPool]}}]</button>
         <div class='dropdown'>
-            <router-link :to="'/y/' + ($route.path.split('/')[2] || '') " :class="{selected: currentPool == 'y'}">Y</router-link>
+            <router-link :to="'/iearn/' + ($route.path.split('/')[2] || '') " :class="{selected: currentPool == 'y'}">Y</router-link>
             <p>____________</p>
             <router-link to='/'>Home</router-link>
             <router-link to='/trade'>Trade</router-link>

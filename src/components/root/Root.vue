@@ -10,15 +10,15 @@
 	            	<span class='tooltip'>
 	            		$
 	            		<span class='tooltiptext'>
-	            			Your total balances: ${{ +sumBalances.toFixed(2) }} 
+	            			Your total balances: ${{ +sumBalances.toFixed(2) }}
 	            		</span>
 	            	</span>
 	            </legend>
 	            <div :class="{selected: activePoolLink == 0}">
 	                <router-link to = '/compound'>
-	                	<span class='index'>0.</span>  
-	                    <span class='pooltext'>Compound</span> 
-	                    <span class='pools'>[(c)DAI, (c)USDC]</span>  
+	                	<span class='index'>0.</span>
+	                    <span class='pooltext'>Compound</span>
+	                    <span class='pools'>[(c)DAI, (c)USDC]</span>
 	                    <span class='apr'>
 	                    	<span class='tooltip'>APY:
 		                    	<span class='tooltiptext long'>
@@ -54,9 +54,9 @@
 	            </div>
 	            <!-- <div :class="{selected: activePoolLink == 1}">
 	                <router-link to = '/usdt'>
-	                	<span class='index'>1.</span>  
+	                	<span class='index'>1.</span>
 	                    <span class='pooltext'>USDT</span>
-	                    <span class='pools'>[(c)DAI, (c)USDC, USDT]</span>  
+	                    <span class='pools'>[(c)DAI, (c)USDC, USDT]</span>
 	                    <span class='apr'>
 	                    	<span class='tooltip'>APY:
 	                    		<span class='tooltiptext long'>
@@ -66,7 +66,7 @@
 		                    		<div>Monthly APY: {{monthly_apy[1]}}%</div>
 		                    		<div>Total APY: {{apy[1]}}%</div>
 		                    	</span>
-	                    	</span> 
+	                    	</span>
 	                    	<span :class="{'loading line': !daily_apy[1]}">{{daily_apy[1]}}</span>%
 	                    </span>
 	                    <span class='volume'>Vol: <span :class="{'loading line': volumes.usdt && volumes.usdt[0] < 0}">
@@ -83,7 +83,7 @@
 	            </div> -->
 	            <div :class="{selected: activePoolLink == 1}">
 	                <router-link to = '/pax'>
-	                	<span class='index'>1.</span>  
+	                	<span class='index'>1.</span>
 	                    <span class='pooltext'>PAX</span>
 	                    <span class='pools'>
 	                    	[<span class='tooltip'>(yc)DAI
@@ -100,9 +100,9 @@
                     		 	<span class='tooltiptext long'>
                     		 	<router-link to='/yctokens'>ycTokens</router-link> are forked yTokens without owner and Compound lending available for ycUSDT
                     		 </span>
-                    		 </span>, 
+                    		 </span>,
                     		 PAX]
-	                	</span>  
+	                	</span>
 	                    <span class='apr'>
 	                    	<span class='tooltip'>APY:
 	                    		<span class='tooltiptext long'>
@@ -112,7 +112,7 @@
 		                    		<div>Monthly APY: {{monthly_apy[5]}}%</div>
 		                    		<div>Total APY: {{apy[5]}}%</div>
 		                    	</span>
-	                    	</span> 
+	                    	</span>
 	                    	<span :class="{'loading line': !daily_apy[5]}">{{daily_apy[5]}}</span>%
 	                    	<div :class="{'incentive-apr': true}">(+{{CRVAPYs.pax | toFixed2}}%
 	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
@@ -137,9 +137,9 @@
 	            </div>
 	            <div :class="{selected: activePoolLink == 2}">
 	                <router-link to = '/y'>
-	                	<span class='index'>2.</span>  
+	                	<span class='index'>2.</span>
 	                    <span class='pooltext'>Y</span>
-	                    <span class='pools'>[(y)DAI, (y)USDC, (y)USDT, (y)TUSD]</span>  
+	                    <span class='pools'>[(y)DAI, (y)USDC, (y)USDT, (y)TUSD]</span>
 	                    <span class='apr'>
 	                    	<span class='tooltip'>APY:
 	                    		<span class='tooltiptext long'>
@@ -149,7 +149,7 @@
 		                    		<div>Monthly APY: {{monthly_apy[2]}}%</div>
 		                    		<div>Total APY: {{apy[2]}}%</div>
 		                    	</span>
-	                    	</span> 
+	                    	</span>
 	                    	<span :class="{'loading line': !daily_apy[2]}">{{daily_apy[2]}}</span>%
 	                    	<div :class="{'loading line': yfiRewards === null, 'incentive-apr': true}">(+{{yfiRewards | toFixed2}}%
                     			<span class='tooltip'>YFI
@@ -181,9 +181,9 @@
 	            </div>
 	            <div :class="{selected: activePoolLink == 3}">
 	                <router-link to = '/busd'>
-	                	<span class='index'>3.</span>  
+	                	<span class='index'>3.</span>
 	                    <span class='pooltext'>BUSD</span>
-	                    <span class='pools'>[(y)DAI, (y)USDC, (y)USDT, (y)BUSD]</span>  
+	                    <span class='pools'>[(y)DAI, (y)USDC, (y)USDT, (y)BUSD]</span>
 	                    <span class='apr'>
 	                    	<span class='tooltip'>APY:
 	                    		<span class='tooltiptext long'>
@@ -193,7 +193,7 @@
 		                    		<div>Monthly APY: {{monthly_apy[3]}}%</div>
 		                    		<div>Total APY: {{apy[3]}}%</div>
 		                    	</span>
-	                    	</span> 
+	                    	</span>
 	                    	<span :class="{'loading line': !daily_apy[3]}">{{daily_apy[3]}}</span>%
 	                    	<div :class="{'incentive-apr': true}">(+{{CRVAPYs.busd | toFixed2}}%
 	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
@@ -218,9 +218,9 @@
 	            </div>
 	            <!-- <div :class="{selected: activePoolLink == 4}">
 	                <router-link to = '/susd/withdraw'>
-	                	<span class='index'>4.</span>  
+	                	<span class='index'>4.</span>
 	                    <span class='pooltext'>sUSD</span>
-	                    <span class='pools'>[(y)sUSD, yCurve]</span>  
+	                    <span class='pools'>[(y)sUSD, yCurve]</span>
 	                    <span class='apr'>APY: <span :class="{'loading line': !daily_apy[4]}">{{daily_apy[4]}}</span>%</span>
 	                    <span class='volume'>
 	                    	Vol: <span :class="{'loading line': volumesData.busd < 0}">
@@ -230,9 +230,9 @@
 	            </div> -->
 	            <div :class="{selected: activePoolLink == 4}">
 	                <router-link to = '/susdv2'>
-	                	<span class='index'>4.</span>  
+	                	<span class='index'>4.</span>
 	                    <span class='pooltext'>sUSD</span>
-	                    <span class='pools'>[DAI, USDC, USDT, sUSD]</span>  
+	                    <span class='pools'>[DAI, USDC, USDT, sUSD]</span>
 	                    <span class='apr'>
 	                    	<span>
 	                    		<span class='tooltip'>APY:
@@ -243,7 +243,7 @@
 			                    		<div>Monthly APY: {{+monthly_apy[4] == 0 ? 'N/A' : monthly_apy[4]}}%</div>
 			                    		<div>Total APY: {{apy[4]}}%</div>
 			                    	</span>
-	                    		</span> 
+	                    		</span>
 	                    		<span :class="{'loading line': !daily_apy[4]}">{{daily_apy[4]}}%</span>
 	                    		<div :class="{'loading line': snxRewards === null, 'incentive-apr': true}">(+{{snxRewards | toFixed2}}%
 	                    			<span class='tooltip'>SNX
@@ -276,9 +276,9 @@
 	            </div>
 	            <!-- <div :class="{selected: activePoolLink == 5}">
 	                <router-link to = '/tbtc'>
-	                	<span class='index'>5.</span>  
+	                	<span class='index'>5.</span>
 	                    <span class='pooltext'>tBTC</span>
-	                    <span class='pools'>[tBTC, hBTC, wBTC]</span>  
+	                    <span class='pools'>[tBTC, hBTC, wBTC]</span>
 	                    <span class='apr'>
 	                    	<span class='tooltip'>APY:
 	                    		<span class='tooltiptext long'>
@@ -288,7 +288,7 @@
 		                    		<div>Monthly APY: {{monthly_apy[6]}}%</div>
 		                    		<div>Total APY: {{apy[6]}}%</div>
 		                    	</span>
-	                    	</span> 
+	                    	</span>
 	                    	<span :class="{'loading line': !daily_apy[6]}">{{daily_apy[6]}}</span>%
 	                    </span>
 	                    <span class='volume'>Vol: <span :class="{'loading line': volumes.tbtc && volumes.tbtc[0] < 0}">
@@ -305,9 +305,9 @@
 	            </div> -->
 	            <div :class="{selected: activePoolLink == 5}">
 	                <router-link to = '/ren'>
-	                	<span class='index'>5.</span>  
+	                	<span class='index'>5.</span>
 	                    <span class='pooltext'>ren</span>
-	                    <span class='pools'>[renBTC, wBTC]</span>  
+	                    <span class='pools'>[renBTC, wBTC]</span>
 	                    <span class='apr'>
 	                    	<span class='tooltip'>APY:
 	                    		<span class='tooltiptext long'>
@@ -317,7 +317,7 @@
 		                    		<div>Monthly APY: {{monthly_apy[7]}}%</div>
 		                    		<div>Total APY: {{apy[7]}}%</div>
 		                    	</span>
-	                    	</span> 
+	                    	</span>
 	                    	<span :class="{'loading line': !daily_apy[7]}">{{daily_apy[7]}}</span>%
 	                    	<div :class="{'incentive-apr': true}">(+{{CRVAPYs.ren | toFixed2}}%
 	                			<span class='tooltip'><img class='icon small' :src="publicPath + 'logo.svg'"> CRV
@@ -341,7 +341,7 @@
 	            </div>
 	            <div :class="{selected: activePoolLink == 6}">
 	                <router-link to = '/sbtc'>
-	                	<span class='index'>6.</span>  
+	                	<span class='index'>6.</span>
 	                    <span class='pooltext'>sbtc</span>
 	                    <span class='pools'>[renBTC, wBTC, sBTC]</span>
 	                    <span class='apr'>
@@ -354,7 +354,7 @@
 			                    		<div>Monthly APY: {{+monthly_apy[8] == 0 ? 'N/A' : monthly_apy[8]}}%</div>
 			                    		<div>Total APY: {{apy[8]}}%</div>
 			                    	</span>
-	                    		</span> 
+	                    		</span>
 	                    		<span :class="{'loading line': !daily_apy[8]}">{{daily_apy[8]}}%</span>
 	                    		<div :class="{'loading line': sbtcRewards === null, 'incentive-apr': true}">(+{{sbtcRewards | toFixed2}}%
 	                    			<span class='tooltip'>SNX/REN
@@ -503,31 +503,31 @@
 				let balancerPool = new contract.web3.eth.Contract(balancer_ABI, balancer_address)
 
 				let calls = [
-					[curveRewards._address, curveRewards.methods.totalSupply().encodeABI()],
-					[sCurve._address, sCurve.methods.get_virtual_price().encodeABI()],
-					[curveRewards._address, curveRewards.methods.DURATION().encodeABI()],
-					[curveRewards._address, curveRewards.methods.rewardRate().encodeABI()],
+					[curveRewards.address, curveRewards.methods.totalSupply().encodeABI()],
+					[sCurve.address, sCurve.methods.get_virtual_price().encodeABI()],
+					[curveRewards.address, curveRewards.methods.DURATION().encodeABI()],
+					[curveRewards.address, curveRewards.methods.rewardRate().encodeABI()],
 
-					[sbtcRewards._address, sbtcRewards.methods.totalSupply().encodeABI()],
-					[sbtcCurve._address, sbtcCurve.methods.get_virtual_price().encodeABI()],
+					[sbtcRewards.address, sbtcRewards.methods.totalSupply().encodeABI()],
+					[sbtcCurve.address, sbtcCurve.methods.get_virtual_price().encodeABI()],
 
-					[	
-						balancerPool._address, 
+					[
+						balancerPool.address,
 						balancerPool.methods.getBalance('0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f').encodeABI()
 					],
                     [
-                    	balancerPool._address,
+                    	balancerPool.address,
                     	balancerPool.methods.getBalance('0x408e41876cccdc0f92210600ef50372656052a38').encodeABI()
                 	],
 
-					[yfiRewards._address, yfiRewards.methods.totalSupply().encodeABI()],
-					[yCurve._address, yCurve.methods.get_virtual_price().encodeABI()],
-                	[yfiRewards._address, yfiRewards.methods.DURATION().encodeABI()],
-					[yfiRewards._address, yfiRewards.methods.rewardRate().encodeABI()],
+					[yfiRewards.address, yfiRewards.methods.totalSupply().encodeABI()],
+					[yCurve.address, yCurve.methods.get_virtual_price().encodeABI()],
+                	[yfiRewards.address, yfiRewards.methods.DURATION().encodeABI()],
+					[yfiRewards.address, yfiRewards.methods.rewardRate().encodeABI()],
 
-					[curveRewards._address, curveRewards.methods.periodFinish().encodeABI()],
-					[sbtcRewards._address, sbtcRewards.methods.periodFinish().encodeABI()],
-					[yfiRewards._address, yfiRewards.methods.periodFinish().encodeABI()],
+					[curveRewards.address, curveRewards.methods.periodFinish().encodeABI()],
+					[sbtcRewards.address, sbtcRewards.methods.periodFinish().encodeABI()],
+					[yfiRewards.address, yfiRewards.methods.periodFinish().encodeABI()],
 				]
 
 				let aggcalls = await contract.multicall.methods.aggregate(calls).call();
@@ -570,7 +570,7 @@
 				let yfiPrice = prices[0] && prices[0]['yearn-finance'].usd
 				if(requests[0].status == 'rejected') {
 					let requests = await Promise.allSettled([
-						fetch('https://api.coinpaprika.com/v1/tickers/hav-havven'), 
+						fetch('https://api.coinpaprika.com/v1/tickers/hav-havven'),
 						fetch('https://api.coinpaprika.com/v1/tickers/ren-republic-protocol'),
 						fetch('https://api.coinpaprika.com/v1/tickers/btc-bitcoin'),
 						fetch('https://poloniex.com/public?command=returnTicker'),
@@ -612,7 +612,7 @@
 				Vue.set(this.balances, 'y', this.balances.y + (+decoded[len-1] * decoded[5]) / 1e36)
 			},
 			handle_pool_change(e) {
-				if(document.querySelector('#from_currency') == document.activeElement 
+				if(document.querySelector('#from_currency') == document.activeElement
 					|| document.querySelector('#custom_slippage_input') == document.activeElement
 					|| document.querySelector('#custom_gas_input') == document.activeElement) return;
 				if(this.activePoolLink == -1) return this.activePoolLink = 0

@@ -8,7 +8,7 @@
       <div class='poolsdropdown'>
         <button class='simplebutton'>☰</button>
         <div class='dropdown'>
-            <router-link :to="'/y/' + ($route.path.split('/')[2] || '')">Y</router-link>
+            <router-link :to="'/iearn/' + ($route.path.split('/')[2] || '')">Y</router-link>
 <!--             <a href="https://iearn.finance/pool">sUSD</a> -->
             <p>____________</p>
             <button class='simplebutton' @click = 'changeWallets'>Change wallet</button>

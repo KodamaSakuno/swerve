@@ -7,8 +7,8 @@
                     <li v-for='(currency, i) in Object.keys(currencies)'>
                         <label :for="'currency_'+i">
                         	<span class='currency_label'>
-                                <img 
-                                    :class="{'token-icon': true, [currency+'-icon']: true}" 
+                                <img
+                                    :class="{'token-icon': true, [currency+'-icon']: true}"
                                     :src='getTokenIcon(currency)'>
     	                        <span>{{currency | capitalize}} </span>
                                 <span @click='setMaxBalanceCoin(i)' class='maxBalanceCoin' v-show="['wbtc', 'sbtc'].includes(currency)">
@@ -32,11 +32,11 @@
                                 </span>
                             </span>
                         </label>
-                        <input 
-                            type="text" 
-                            :id="'currency_'+i" 
-                            :disabled='disabled' 
-                            name="from_cur" 
+                        <input
+                            type="text"
+                            :id="'currency_'+i"
+                            :disabled='disabled'
+                            name="from_cur"
                             v-model = 'inputs[i]'
                             :style = "{backgroundColor: bgColors[i]}"
                             @input='change_currency(i, true)'
@@ -58,7 +58,7 @@
                 </li> -->
                 <li id='inf_approval_wrapper'>
                     <input id="inf-approval" type="checkbox" name="inf-approval" checked v-model='inf_approval'>
-                    <label for="inf-approval">Infinite approval - trust this contract forever 
+                    <label for="inf-approval">Infinite approval - trust this contract forever
                     	<span class='tooltip'>[?]
                     		<span class='tooltiptext long'>
                     			Preapprove the contract to to be able to spend any amount of your coins. You will not need to approve again.
@@ -81,15 +81,15 @@
                 <button id="add-liquidity" :disabled='amountAfterBTC < 0 && +inputs[0] > 0' @click='handle_add_liquidity()'>
                 		Deposit <span class='loading line' v-show='loadingAction == 1'></span>
                 </button>
-                <button 
-                    id="add-liquidity-stake" 
-                    :disabled='amountAfterBTC < 0 && +inputs[0] > 0' 
+                <button
+                    id="add-liquidity-stake"
+                    :disabled='amountAfterBTC < 0 && +inputs[0] > 0'
                     v-show="['sbtc'].includes(currentPool)"
                     @click='handle_add_liquidity(true)'>
                         Deposit and stake <span class='loading line' v-show='loadingAction == 2'></span>
                 </button>
-                <button id='stakeunstaked' 
-                    v-show="totalShare > 0 && ['sbtc'].includes(currentPool)" 
+                <button id='stakeunstaked'
+                    v-show="totalShare > 0 && ['sbtc'].includes(currentPool)"
                     @click='stakeTokens()'>
                     Stake unstaked <span class='loading line' v-show='loadingAction == 3'></span>
                 </button>
@@ -184,7 +184,7 @@
 
         },
         watch: {
-            
+
         },
         computed: {
           ...getters,
@@ -199,7 +199,7 @@
                 return {
                     btc: 'BTC',
                     wbtc: 'wBTC',
-                    sbtc: 'sBTC',   
+                    sbtc: 'sBTC',
                 }
             }
           },
@@ -248,7 +248,7 @@
         		currentContract.slippage = 0;
                 await this.handle_sync_balances();
                 await this.calcSlippage()
-                let calls = [...Array(currentContract.N_COINS).keys()].map(i=>[this.coins[i]._address, 
+                let calls = [...Array(currentContract.N_COINS).keys()].map(i=>[this.coins[i].address,
                 	this.coins[i].methods.allowance(currentContract.default_account || '0x0000000000000000000000000000000000000000', this.swap_address).encodeABI()])
                 let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
                 let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
@@ -318,12 +318,12 @@
 			    await common.update_fee_info();
 			    let calls = []
                 for(let [i, coin] of this.coins.slice(1).entries()) {
-    	           calls.push([coin._address, coin.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
-    	           calls.push([currentContract.swap._address, currentContract.swap.methods.balances(i).encodeABI()])
+    	           calls.push([coin.address, coin.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+    	           calls.push([currentContract.swap.address, currentContract.swap.methods.balances(i).encodeABI()])
                 }
                 if(this.currentPool == 'sbtc') {
-                    calls.push([this.coins[2]._address, this.coins[2].methods.transferableSynths(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
-                    calls.push([currentContract.snxExchanger._address, 
+                    calls.push([this.coins[2].address, this.coins[2].methods.transferableSynths(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+                    calls.push([currentContract.snxExchanger.address,
                         currentContract.snxExchanger.methods
                         .maxSecsLeftInWaitingPeriod(currentContract.default_account, "0x7355534400000000000000000000000000000000000000000000000000000000")
                         .encodeABI()])
@@ -376,7 +376,7 @@
                         gas: 400000,
                     })
                     .once('transactionHash', hash => {
-                        this.waitingMessage = `Waiting for stake transaction to confirm 
+                        this.waitingMessage = `Waiting for stake transaction to confirm
                             ${deposit_and_stake ? '(2/2)' : ''}: no further action needed`
                         dismiss()
                         notifyHandler(hash)
@@ -401,15 +401,15 @@
 				//this.show_loading = true
 				let calls = this.coins.slice(1).map((coin, i) => {
                             if(this.currentPool == 'sbtc' && i == 1)
-                                return [coin._address, coin.methods.transferableSynths(currentContract.default_account).encodeABI()]
-				            return [coin._address, coin.methods.balanceOf(currentContract.default_account).encodeABI()]
+                                return [coin.address, coin.methods.transferableSynths(currentContract.default_account).encodeABI()]
+				            return [coin.address, coin.methods.balanceOf(currentContract.default_account).encodeABI()]
                         }
                     )
-				calls.push([currentContract.swap_token._address, currentContract.swap_token.methods.totalSupply().encodeABI()])
+				calls.push([currentContract.swap_token.address, currentContract.swap_token.methods.totalSupply().encodeABI()])
                 let endOffset = 1
                 if(this.currentPool == 'sbtc') {
                     calls.push([
-                        currentContract.snxExchanger._address, 
+                        currentContract.snxExchanger.address,
                             currentContract.snxExchanger.methods
                             .maxSecsLeftInWaitingPeriod(currentContract.default_account, "0x7355534400000000000000000000000000000000000000000000000000000000")
                             .encodeABI()
@@ -442,7 +442,7 @@
                     token_amount = BN(token_amount).times(0.99).toFixed(0,1);
                 }
 				this.estimateGas = contractGas.deposit[this.currentPool] / 2
-		      
+
                 if(+this.inputs[0] > 0) {
                     for(let i = 1; i < currentContract.N_COINS; i++) {
                         await common.approveAmount(this.coins[i], BN(this.amounts[i]), currentContract.default_account, allabis[currentContract.currentContract].adapterBiconomyAddress, this.inf_approval)
@@ -455,7 +455,7 @@
                         await common.ensure_allowance(this.amounts, false);
                     }
                 }
-	
+
 			    let receipt;
 			    let minted = 0;
                 //this.waitingMessage = 'Please confirm deposit transaction'
@@ -471,9 +471,9 @@
                     }).once('transactionHash', hash => {
                         dismiss()
                         notifyHandler(hash)
-                        this.waitingMessage = 
-                        `Waiting for deposit 
-                            <a href='http://etherscan.io/tx/${hash}'>transaction</a> 
+                        this.waitingMessage =
+                        `Waiting for deposit
+                            <a href='http://etherscan.io/tx/${hash}'>transaction</a>
                             to confirm ${stake ? 'before staking' : 'no further action required'}`
                     })
                     try {
@@ -495,7 +495,7 @@
                             minted = BN(
                                 Object.values(receipt.events).filter(event => {
                                     return (event.address.toLowerCase() == allabis.sbtc.token_address.toLowerCase())
-                                            && event.raw.topics[1] == "0x0000000000000000000000000000000000000000000000000000000000000000" 
+                                            && event.raw.topics[1] == "0x0000000000000000000000000000000000000000000000000000000000000000"
                                             && event.raw.topics[2].toLowerCase() == '0x000000000000000000000000' + currentContract.default_account.slice(2).toLowerCase()
                                 })[0].raw.data)
                             await helpers.setTimeoutPromise(100)
@@ -506,7 +506,7 @@
                                 minted = BN(
                                     Object.values(receipt.logs).filter(event => {
                                         return (event.address.toLowerCase() == allabis.sbtc.token_address.toLowerCase())
-                                                && event.topics[1] == "0x0000000000000000000000000000000000000000000000000000000000000000" 
+                                                && event.topics[1] == "0x0000000000000000000000000000000000000000000000000000000000000000"
                                                 && event.topics[2].toLowerCase() == '0x000000000000000000000000' + currentContract.default_account.slice(2).toLowerCase()
                                     })[0].data)
                                 await helpers.setTimeoutPromise(100)
@@ -540,7 +540,7 @@
     			    }
                 }
 				this.waitingMessage = ''
-				this.estimateGas = 0 
+				this.estimateGas = 0
 				this.gasPrice = 0
                 this.justDeposit = false
 

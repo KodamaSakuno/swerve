@@ -8,9 +8,9 @@
             </legend>
             <ul>
                 <li>
-                    <input type="text" 
-                    id="liquidity-share" 
-                    name="liquidity-share" 
+                    <input type="text"
+                    id="liquidity-share"
+                    name="liquidity-share"
                     v-model='share'
                     @input='handle_change_share'
                     @focus='handle_change_share'
@@ -23,8 +23,8 @@
             <ul>
                 <li v-for='(currency, i) in Object.keys(currencies)'>
                     <label :for="'currency_'+i" class='currency_label'>
-                        <img 
-                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}" 
+                        <img
+                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}"
                             :src='getTokenIcon(currency)'>
                         <span v-show='withdrawc'>{{currencies[currency]}}
 	                    	<span v-show="!(currency == 'usdt' && currentPool == 'usdt') && currentPool != 'susdv2'">(in {{currency | capitalize}})</span>
@@ -32,9 +32,9 @@
                     	<span v-show="!withdrawc && !['susdv2', 'tbtc', 'ren'].includes(currentPool)">{{currency | capitalize}}</span>
                         <span v-show="!withdrawc && ['susdv2', 'tbtc', 'ren'].includes(currentPool)">{{currencies[currency]}}</span>
                     </label>
-                    <input type="text" 
-                    :id="'currency_'+i" 
-                    name="from_cur" 
+                    <input type="text"
+                    :id="'currency_'+i"
+                    name="from_cur"
                     v-model = 'inputs[i]'
                     :style = "inputStyles[i]"
                     :disabled = "currentPool == 'susd'"
@@ -64,8 +64,8 @@
                         Combination of all coins
                         <span v-for='(currency, i) in Object.keys(currencies)'>
                             <span v-show='i > 0'>+</span>
-                            <img 
-                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}" 
+                            <img
+                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}"
                             :src='getTokenIcon(currency)'>
                         </span>
                     </label>
@@ -73,17 +73,17 @@
 				<li v-for='(currency, i) in Object.keys(currencies)' class='withdrawin'>
 	                <input type="radio" :id="'to_cur_'+i" name="to_cur" :value='i' :checked='to_currency === i' @click='handleCheck(i)'>
 	                <label :for="'to_cur_'+i">
-                        <img 
-                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}" 
-                            :src='getTokenIcon(currency)'> 
+                        <img
+                            :class="{'token-icon': true, [currency+'-icon']: true, 'y': withdrawc, [currentPool]: true}"
+                            :src='getTokenIcon(currency)'>
                             <span v-show='!withdrawc'> {{ currency | capitalize }} </span>
                             <span v-show='withdrawc'> {{ currencies[currency] }} </span>
                     </label>
 	            </li>
 	            <li>
 	            	<input type='checkbox' id='donate_dust' name='donate_dust' v-model='donate_dust'>
-	            	<label 
-                        for='donate_dust' 
+	            	<label
+                        for='donate_dust'
                         v-show="!['tbtc', 'ren'].includes(currentPool)">
                             Donate dust<span class='tooltip'>[?]<span class='tooltiptext'>(may use less gas)</span>
                         </span>
@@ -91,7 +91,7 @@
 	            </li>
         	</ul>
         </fieldset>
-        <div id='max_slippage' v-show='showWithdrawSlippage'><span>Max slippage:</span> 
+        <div id='max_slippage' v-show='showWithdrawSlippage'><span>Max slippage:</span>
             <input id="slippage02" type="radio" name="slippage" value='0.2' v-model='maxSlippage'>
             <label for="slippage02">0.2%</label>
 
@@ -118,7 +118,7 @@
 	            @click='handle_remove_liquidity()' v-show="currentPool != 'susd'">
         		Withdraw <span class='loading line' v-show='loadingAction == 1'></span>
         	</button>
-        	<button 
+        	<button
         		id='remove-liquidity-unstake'
         		v-show = "currentPool == 'susdv2' && staked_balance > 0 "
         		:disabled = 'slippage < -0.03'
@@ -337,18 +337,18 @@
             	let calls = []
 			    if (currentContract.default_account) {
 			        for (let i = 0; i < currentContract.N_COINS; i++) {
-			        	calls.push([currentContract.underlying_coins[i]._address ,currentContract.underlying_coins[i].methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+			        	calls.push([currentContract.underlying_coins[i].address ,currentContract.underlying_coins[i].methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
 			        }
-			        calls.push([currentContract.swap_token._address ,currentContract.swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+			        calls.push([currentContract.swap_token.address ,currentContract.swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
 			    }
 			    else {
 			        this.token_balance = BN(0);
 			    }
 			    for (let i = 0; i < currentContract.N_COINS; i++) {
-			    	calls.push([currentContract.swap._address ,currentContract.swap.methods.balances(i).encodeABI()])
+			    	calls.push([currentContract.swap.address ,currentContract.swap.methods.balances(i).encodeABI()])
 			    }
 		    	if(this.currentPool == 'susdv2') calls.push([currentContract.curveRewards_address, currentContract.curveRewards.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
-				calls.push([currentContract.swap_token._address ,currentContract.swap_token.methods.totalSupply().encodeABI()])
+				calls.push([currentContract.swap_token.address ,currentContract.swap_token.methods.totalSupply().encodeABI()])
 				let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
 				let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
 				if(currentContract.default_account) {
@@ -356,7 +356,7 @@
 						Vue.set(this.wallet_balances, i, +v / allabis[this.currentPool].coin_precisions[i])
 					})
 					this.token_balance = BN(decoded[currentContract.N_COINS])
-					decoded = decoded.slice(currentContract.N_COINS+1)			
+					decoded = decoded.slice(currentContract.N_COINS+1)
 				}
 				decoded.slice(0, currentContract.N_COINS+1 + currentContract.N_COINS).map((v, i) => {
 					Vue.set(this.balances, i, +v)
@@ -379,9 +379,9 @@
 		        values = values.map(v=>BN(Math.floor(v).toString()).toFixed(0))
 		        this.show_nobalance = false;
 		        this.show_nobalance_i = 0;
-		        let calls = [...Array(currentContract.N_COINS).keys()].map(i=>[currentContract.swap._address, currentContract.swap.methods.balances(i).encodeABI()])
-		        calls.push([currentContract.swap._address ,currentContract.swap.methods.calc_token_amount(values, false).encodeABI()])
-		        calls.push([currentContract.swap_token._address, currentContract.swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
+		        let calls = [...Array(currentContract.N_COINS).keys()].map(i=>[currentContract.swap.address, currentContract.swap.methods.balances(i).encodeABI()])
+		        calls.push([currentContract.swap.address ,currentContract.swap.methods.calc_token_amount(values, false).encodeABI()])
+		        calls.push([currentContract.swap_token.address, currentContract.swap_token.methods.balanceOf(currentContract.default_account || '0x0000000000000000000000000000000000000000').encodeABI()])
 		        try {
                     let aggcalls = await currentContract.multicall.methods.aggregate(calls).call()
                     let decoded = aggcalls[1].map(hex => currentContract.web3.eth.abi.decodeParameter('uint256', hex))
@@ -443,7 +443,7 @@
                     <br>
                     A bit more tokens are needed to unstake to ensure that withdrawal is successful.
                     You'll see them in your unstaked balance afterwards.
-                        
+
                 `;
                 try {
     				await new Promise((resolve, reject) => {
