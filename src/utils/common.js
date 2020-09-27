@@ -20,16 +20,12 @@ export function approve(contract, amount, account, toContract) {
                 contract.methods.approve(toContract, cBN(amount).toFixed(0,1))
                 .send({
                     from: account,
-                    gasPrice: gasPriceStore.state.gasPriceWei,
-                    gas: 100000,
+                    feeLimit: 100000,
                 })
-                .once('transactionHash', function(hash) {
+                .then(function(hash) {
+                    debugger
                     notifyHandler(hash)
                     resolve(true)
-                })
-                .on('error', err => {
-                    errorStore.handleError(err)
-                    reject(err)
                 })
                 .catch(err => {
                     errorStore.handleError(err)

@@ -2898,14 +2898,14 @@ var usdt = {
 }
 
 var iearn = {
-  N_COINS: 4,
+  N_COINS: 2,
   coin_precisions: [1e6, 1e18],
   wrapped_precisions: [1e6, 1e18],
   use_lending: [true, true],
   tethered: [true, false],
   is_plain: [false, false],
-  swap_address: 'TTkwhxZ6es7jQHLqNxLRmXnfLYoXaR9Dqt',
-  token_address: 'TPFatgczAsJg5rmavfJYu7X14QSWi3hH9m',
+  swap_address: 'TRkyKJHU69F2YLbBTGfi7vjsAAhTujqfew',
+  token_address: 'TNptRWhPS2EZmHQwfhUUAL1DBQxwJMVtUX',
   infura_url: 'https://mainnet.infura.io/v3/c334bb4b45a444979057f0fb8a0c9d1b',
   underlying_coins: [
         'TUA5EzMVsT3LcgKebmWfvuhPU4nbwPhrvB',
@@ -2913,7 +2913,7 @@ var iearn = {
   coins: [
         'TUA5EzMVsT3LcgKebmWfvuhPU4nbwPhrvB',
         'THxNgawCMxaoeoETEg62apPkpYBBcT8dWr'],
-  deposit_address: 'TPxB1C6mqARfCPRGic4572S8m114n6jXei',
+  deposit_address: 'TUQstjyd6TsDL9Um5Jc8h65wHghS3XsAsL',
   deposit_abi: [
 	 {
 	  "outputs": [],
@@ -3143,7 +3143,7 @@ var iearn = {
   sCurveRewards_address: '0x0001FB050Fe7312791bF6475b96569D83F695C9f',
   aRewards_abi: [{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":true,"inputs":[],"name":"adai","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"claim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"_claimer","type":"address"}],"name":"claimable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"governance","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"seize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"yfi","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}],
   aRewards_address: '0xcc9efea3ac5df6ad6a656235ef955fbfef65b862',
-  APYOracle_address: "TLFauHTnRkH52wfn83xfrQAeaFF3DKkE2p",
+  APYOracle_address: "TQUPEiK2b2oEvFU9W4p1dgCUpr3isyMptN",
   APYOracle_abi: [
     {
       "inputs": [],

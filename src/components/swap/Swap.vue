@@ -469,6 +469,7 @@
                 // let balances = aggcalls[1].map(hex => web3.eth.abi.decodeParameter('uint256', hex))
                 // let amounts = balances.map(balance => currentContract.default_account ? balance : 0)
                 this.maxBalance = await currentContract.coins[i].methods.balanceOf(this.default_account).call()
+                console.warn(this.maxBalance.toNumber())
                 let highlight_red = this.fromInput > this.maxBalance / this.precisions[this.from_currency]
                 if(highlight_red)
                     this.fromBgColor = '#2f3437'
@@ -526,16 +527,16 @@
                 // if(this.swapwrapped) currency = Object.values(this.currencies)[this.from_currency]
                 // if(this.maxInputSlippage) maxSlippage = this.maxInputSlippage / 100;
                 var dx = Math.floor(this.fromInput * this.precisions[i]);
-                // if(BN(this.maxBalance).gt(0) && BN(this.maxBalance).div(this.precisions[i]).minus(BN(this.fromInput)).lt(BN(this.minAmount))) {
-                //     dx = this.maxBalance
-                // }
-                // let min_dy_method = 'get_dy_underlying'
+                if(BN(this.maxBalance).gt(0) && BN(this.maxBalance).div(this.precisions[i]).minus(BN(this.fromInput)).lt(BN(this.minAmount))) {
+                    dx = this.maxBalance
+                }
+                let min_dy_method = 'get_dy_underlying'
                 // if(this.swapwrapped || ['susdv2', 'tbtc', 'ren', 'sbtc'].includes(this.currentPool)) {
                 //     min_dy_method = 'get_dy'
                 // }
                 var min_dy = BN(await currentContract.swap.methods[min_dy_method](i, j, BN(dx).toFixed(0,1)).call())
                 min_dy = min_dy.times(1-maxSlippage)
-                // dx = cBN(dx.toString()).toFixed(0,1);
+                dx = cBN(dx.toString()).toFixed(0,1);
                 // this.waitingMessage = `Please approve ${this.fromInput} ${this.getCurrency(this.from_currency)} for exchange`
                 // var { dismiss } = notifyNotification(this.waitingMessage)
                 // try {
@@ -551,11 +552,11 @@
                 //     this.show_loading = false
                 //     throw err;
                 // }
-                dismiss()
                 this.waitingMessage = `Please confirm swap
                                         from ${this.fromInput} ${this.getCurrency(this.from_currency)}
                                         for min ${this.toFixed(min_dy / this.precisions[j])} ${this.getCurrency(this.to_currency)}`
                 var { dismiss } = notifyNotification(this.waitingMessage)
+                dismiss()
                 min_dy = cBN(min_dy).toFixed(0);
                 let exchangeMethod = currentContract.swap.methods.exchange_underlying
                 if(this.swapwrapped || ['susdv2', 'tbtc', 'ren', 'sbtc'].includes(this.currentPool)) exchangeMethod = currentContract.swap.methods.exchange
@@ -564,17 +565,17 @@
                     await exchangeMethod(i, j, dx, BN(min_dy).toFixed(0,1))
                         .send({
                             from: currentContract.default_account,
-                            gasPrice: this.gasPriceWei,
-                            gas: this.swapwrapped ?
+                            callValue: this.gasPriceWei,
+                            feeLimit: this.swapwrapped ?
                                     contractGas.swap[this.currentPool].exchange(i, j) : contractGas.swap[this.currentPool].exchange_underlying(i, j),
                         })
-                        .once('transactionHash', hash => {
-                            dismiss()
-                            notifyHandler(hash)
-                            this.waitingMessage = `Waiting for swap
-                                                    <a href='https://etherscan.io/tx/${hash}'>transaction</a>
-                                                    to confirm: no further action needed`
-                        })
+                        // .once('transactionHash', hash => {
+                        //     dismiss()
+                        //     notifyHandler(hash)
+                        //     this.waitingMessage = `Waiting for swap
+                        //                             <a href='https://etherscan.io/tx/${hash}'>transaction</a>
+                        //                             to confirm: no further action needed`
+                        // })
                 }
                 catch(err) {
                     console.error(err)
